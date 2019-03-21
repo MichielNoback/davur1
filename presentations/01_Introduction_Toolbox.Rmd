@@ -2,7 +2,9 @@
 title: "Data analysis and visualization using R"
 author: "Michiel Noback"
 date: "november 2015"
-output: beamer_presentation
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
 subtitle: The R toolbox
 job: lecturer at Hanze University of Applied Science
 ---
