@@ -1,0 +1,503 @@
+---
+title: "Data analysis and visualization using R"
+author: "Michiel Noback"
+date: "november 2015"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+  pdf_document: default
+subtitle: Complex data types
+job: lecturer at Hanze University of Applied Science
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F}
+#comment this out for pdf output
+source("rmarkdown_knitr_header.R")
+```
+
+```{r echo = F}
+par(mar=c(3,3,0,0))
+```
+
+
+## Complex datatypes and IO
+
+**Contents**
+
+- Matrices
+- Factors
+- Lists
+- Data frames
+- Reading dataframes from file (first iteration)
+- Plotting with dataframes
+
+# Matrices
+
+## Matrices are vectors with dimensions
+
+- We will not detail on them in this course, only this one slide
+- This does not mean they are not important, but they are just not the focus here
+
+
+```{r matrix_demo}
+m <- matrix(1:10, nrow = 2, ncol = 5); m
+v <- 1:10; dim(v) <- c(2, 5); v
+```
+
+
+# Factors
+
+## Factors
+
+- Although factors are not really complex, I saved them because they have some strange behaviour.
+- Factors are used to represent different levels of some explanatory variable. 
+- For instance:  
+    - eye color (brown, blue, green)
+    - weight class (underweight, normal, obese)
+    - plant age in years (1, 2, 3)
+
+
+## Factors
+- Factors are used to represent data in nominal or ordinal scales
+- Nominal has no order; Ordinal has
+- these functions are relevant 
+    - `factor(x)` 
+    - `as.factor(x)`
+    - `factor(x, levels = my_levels, labels = my_labels)`
+
+## Character to factor
+
+- Suppose you have surveyed the eye color of your class room and found these values
+
+```{r eye_color_1, tidy=FALSE}
+eye_colors <- c("green", "blue", "brown", "brown", "blue",
+    "brown", "brown", "brown", "blue", "brown", "green",
+    "brown", "brown", "blue", "blue", "brown")
+```
+
+- next you would like to plot or tabulate these findings
+
+
+## Plot character data
+
+- Simply plotting gives an error
+
+```{r eye_color_2, error=TRUE}
+plot(eye_colors)
+```
+
+
+## Plot factor data
+
+- Plotting a character vector converted to a factor is easy
+
+```{r eye_color_3, fig.width=4.5, fig.height=3.5}
+eye_colors <- as.factor(eye_colors)
+plot(eye_colors)
+```
+
+
+## Tabulate factor data
+
+- Factors are also really easy to tabulate and filter
+
+```{r eye_color_4}
+table(eye_colors)
+sum(eye_colors == "blue")
+```
+
+
+## Defining levels
+
+- Especially when working with ordinal scales, defining the order of the factors (levels) is useful
+- By default, R uses the natural ordering (numerical/alphabetical)
+- You can even define missing levels, as shown in the next slide
+
+
+## Factors with ordinal scale
+
+```{r class_sizes_1, fig.width=4.5, fig.height=3.5}
+classSizes <- factor(c("big", "small", "huge", "huge", 
+    "small","big","small","big"),
+    levels = c("small", "normal", "big", "huge"),
+    ordered = TRUE)
+plot(classSizes)
+```
+
+
+## Calculations with factors in Ordinal scale
+
+- When you have an ordered factor, you can do some calulations with it
+
+```{r class_sizes_2}
+classSizes < "big"
+sum(classSizes == "huge")
+```
+
+
+## Convert existing factors
+
+When you already have an unorderd factor, you can make it ordered by using the function `ordered()` together with the levels vector
+
+```{r class_sizes_3}
+classSizes <- factor(c("big", "small", "huge", "huge",
+    "small", "big", "small", "big"))
+classSizes <- ordered(classSizes,
+                    levels = c("small", "big", "huge"))
+classSizes
+```
+
+
+## Working with factors
+
+Factors are used all the time e.g. for defining treated/untreated. That's why R knows how to deal with them so well:
+
+```{r factor_plotting, fig.height = 4, fig.width = 7}
+with(ChickWeight, plot(weight ~ Diet))
+```
+
+
+# Lists
+
+
+## Lists
+
+- A list is an ordered collection of vectors
+- These vectors can have **differing types** and **differing lengths**
+- Accessing list elements is done with double brackets: `[[]]` or the dollar sign `$` if the elements are named
+
+## List action
+
+```{r list_action}
+x <- c(2, 3, 1)
+y <- c("foo", "bar")
+l <- list(x, y); l
+l[[2]]
+l[[1]][2]
+```
+
+
+## Named list elements (1)
+List can also have named elements
+
+```{r list_named_elements_1}
+x <- c(2, 3, 1)
+y <- c("foo", "bar")
+l <- list("numbers" = x, "words" = y)
+l
+```
+
+
+## Named list elements (2)
+
+Accessing named elements can be done in three ways
+
+```{r list_named_elements_2}
+l[[2]]        # index
+l[["words"]]  # name of element with double brackets
+l$words       # name of element with dollar sign
+```
+
+
+## Named list elements (3)
+
+Accessing named elements has its limitations
+
+```{r list_named_elements_3}
+select <- "words"
+l[[select]] ## OK
+l$select ##fails - no element with name "select"
+```
+
+
+## Single versus double brackets on lists
+
+single brackets on a list returns a list; double brackets a vector
+
+```{r list_brackets_1}
+l[[2]]
+l[2]
+l["words"]
+```
+
+
+## Single vs. double brackets on lists (2)
+
+This behaviour can become awkward
+
+```{r list_brackets_2}
+l["words"]$words
+l[2]["words"][1]$words  ## mind****
+```
+
+
+## Arrays
+
+- Arays are vectors with a dimensions (`dim`) attribute
+- Also created using `array()` function
+- An array with 2 dimensions is a matrix
+
+```{r arrays1}
+x <- 1:10
+dim(x) <- c(2, 5)
+x
+class(x)
+```
+
+
+----
+
+```{r arrays2}
+a <- array(data = 1:12, dim = c(2, 3, 2))
+# same as "a <- 1:12; dim(a) <- c(2, 3, 2)"
+rownames(a) <- c("foo", "bar")
+a
+class(a)
+```
+
+
+# Dataframes
+
+## data.frame rules all
+
+- In practice you will work with data frames >95% of the time
+- Let's meet and greet
+
+```{r data_frame_1, tidy=FALSE}
+geneNames <- c("P53","BRCA1","VAMP1", "FHIT")
+sig <- c(TRUE, TRUE, FALSE, FALSE)
+meanExp <- c(4.5, 7.3, 5.4, 2.4)
+genes <- data.frame(
+    "name" = geneNames,  
+    "significant" = sig,  
+    "expression" = meanExp)  
+genes
+```
+
+
+-----
+
+```{r data_frame2}
+genes[2,1] 		#row 2, element 1
+genes[, 1:2] 	#columns 1 and 2
+genes[1:2] 		#columns 1 and 2 (!)
+```
+
+
+-----
+
+```{r data_frame3}
+genes[1:2,] #row 1 and 2
+genes[c("name", "expression")]	#"name" and "expression"
+genes$name 	#column "name"
+```
+
+
+## Selections on dataframes summarized
+
+- In general, selections on dataframes are done in this form:
+- `my_data[row_sel, col_sel]`
+- where `row_sel` and `col_sel` can be 
+    - a single index 
+    - a numerical vector 
+    - a logical vector (of the same length!)
+    - empty (for all rows/columns)
+
+
+## A dataframe is (sort of) a list of vectors
+
+```{r data_frame4}
+genes[["name"]] ## select column w. double brackets
+class(genes) ## it is NOT a list though
+str(genes)
+```
+
+
+# Reading from file
+
+## Loading data frames from file
+
+- In real life, data in dataframes is often loaded from file
+- The most used data transfer & storage format is text (tab- or comma-separated)
+- Here is an example data set in file ("whale_selenium.txt")
+
+```
+whale liver.Se tooth.Se  
+1 6.23 140.16  
+2 6.79 133.32  
+3 7.92 135.34  
+...  
+19 41.23 206.30  
+20 45.47 141.31  
+```
+
+## Reading the whale data
+
+```{r echo=FALSE, results="hide"}
+setwd("/Users/michiel/Dropbox/courses/ILST_minor_Thema11_intro_R/public/presentations/")
+```
+
+```{r data_frame_io1}
+whale.selenium <- read.table("data/whale_selenium.txt")
+head(whale.selenium)
+```
+
+- When loading the data in the standard way, 
+    - there is no special consideration for the header line
+    - the separator is assumed to be a space
+    - the decimal is assumed to be a dot "."
+
+----
+
+- Here, it is specified that
+    - the first line is a header line
+    - the first colum contains the row names
+    
+```{r data_frame_io2}
+whale.selenium <- read.table(
+    file = "data/whale_selenium.txt",
+    header = TRUE,
+    row.names = 1)
+summary(whale.selenium)
+```
+
+## What is in that dataframe?
+
+```{r data_frame_sel}
+head(whale.selenium, n=3) #have a peek
+mean(whale.selenium$liver.Se) #look at a single column
+str(whale.selenium) #what is the structure
+```
+
+
+## Ready to rumble
+
+```{r data_frame_io3, fig.width=7, fig.height=4}
+plot(
+    whale.selenium$liver.Se, whale.selenium$tooth.Se,
+    xlab = "liver Selenium", ylab = "tooth Selenium")
+abline(lm(whale.selenium$tooth.Se ~
+              whale.selenium$liver.Se))
+```
+
+----
+
+or, with a smoother:
+
+```{r data_frame_io4, fig.width=7, fig.height=4}
+scatter.smooth(
+    whale.selenium$liver.Se, whale.selenium$tooth.Se,
+    xlab = "liver Selenium", ylab = "tooth Selenium")
+abline(lm(whale.selenium$tooth.Se ~ 
+              whale.selenium$liver.Se))
+```
+
+
+## Advanced file reading
+
+More advanced file reading will be dealt with in a later presentation.
+
+
+# Basic DF manipulations
+
+
+## Changing column names
+
+```{r rename_columns}
+names(whale.selenium) <- c("liver", "tooth")
+head(whale.selenium, n=2)
+##or
+colnames(whale.selenium) <- c("brrrr", "gross")
+head(whale.selenium, n=2)
+```
+
+```{r echo = FALSE, results = "hide"}
+colnames(whale.selenium) <- c("liver", "tooth")
+```
+
+
+## Adding columns
+
+You can add columns to an exisiting dataframe
+
+```{r add_columns}
+## add simulated stomach data
+whale.selenium$stomach <- rnorm(nrow(whale.selenium), 42, 6) 
+head(whale.selenium, n=2)
+# or
+cbind(whale.selenium,
+      "a_code" = rep(1:2, nrow(whale.selenium)))
+```
+
+
+## Adding rows: `rbind()`
+
+Adding rows is similar (continued on next slide)
+
+```{r add_rows1}
+myData1 <- data.frame(colA = 1:3, colB = c("a", "b", "c"))
+myData2 <- data.frame(colA = 4:5, colB = c("d", "e"))
+```
+
+
+----
+
+```{r add_rows2}
+myDataComplete <- rbind(myData1, myData2)
+myDataComplete
+```
+
+Note that the column names of both dataframes need to match for this operation to succeed!
+
+
+## Getting a summary
+
+```{r summary_demo}
+summary(whale.selenium) ## a 6-number summary of each column
+```
+
+
+## Getting the dimensions of a dataframe
+
+```{r dim_demo}
+dim(whale.selenium)
+```
+
+
+## A more readable selection
+
+- You can also use `subset()` to make both **column** and **row selections**
+- This is a more readable alternative to `[ , ]`
+- Note that you don't even need to use quotes
+
+```{r}
+##select rows for which Solar.R is available
+head(subset(airquality, subset = !is.na(Solar.R)))
+```
+
+## `subset()` cont.
+
+```{r}
+## select two columns only
+head(subset(airquality, select = c(Ozone, Solar.R)))
+```
+
+## `subset()` cont.
+
+```{r}
+## combine row and colum selection
+head(subset(airquality, 
+            subset = !is.na(Solar.R), 
+            select = c(Ozone, Solar.R)))
+```
+
+## `subset()` cont.
+
+```{r}
+## shorthand
+subset(airquality, Day == 1, select = -Temp)
+```
+
+subset() can be used more sophisticated; just GIYF
+
+

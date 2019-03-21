@@ -1,0 +1,14 @@
+Lecture;Presentation;Topics;Homework
+1;Presentation 1: Toolbox, Start Presentation 2: Basic R;R, RStudio, RMarkdown, Swirl, vector data;Install R and Rstudio at home, Install Swirl and Swirl course. Start Swirl course
+2;Presentation 2: basic R;Numeric sequences, Logical operations & subsetting. Plotting intro;Rmarkdown tutorial, Create Rmarkdown document of own resume
+3;Presentation 2: basic R;Coding style rules, Operators and boolean expressions;Swirl lesson Working with Vectors, Exercises 1.1, 1.2
+4;Presentation 3: Complex data types;Matrix, Factor, List;Swirl lesson Complex Datatypes, Exercises 1.3, 1.4, 2.1
+5;Presentation 3: Complex data types;Data Frames, IO;Swirl lesson Complex Datatypes, Exercises 1.5, 2.2, discover how to write to file yourself
+6;Presentation 4: Functions;Descriptive statistics, 5-number summary & Boxplot;Exercises 1.6
+7;Presentation 4: Functions;Sort & Order, General purpose functions, Reading different data formats;Exercise 2.3: GOLDEN GATE AUDUBON SOCIETY (part)
+8;Presentation 4: Functions;General purpose functions (2), Flow control, Creating functions; Exercises 3.1, 3.2, 3.3, 3.4
+9;Presentation 5: DF manipulations;Apply & relatives, selections on DFs;Exercises 4.1, 4.2
+10;Presentation 5: DF manipulations;Split, Aggregate & Merge;Exercise 4.3, 4.4
+11;Presentation 5: DF manipulations (overflow);;
+12;Presentation 6: Distributions, sampling & testing;Xnorm, sample;Dataframe exercise (2.3): GOLDEN GATE AUDUBON SOCIETY (finish)
+13;Presentation 6: Distributions, sampling & testing;t-test, anova, Questions, Where to go from here;

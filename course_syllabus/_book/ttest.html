@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Data Analysis and Visualization using R</title>
+  <meta name="description" content="Data Analysis and Visualization using R">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Data Analysis and Visualization using R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Data Analysis and Visualization using R" />
+  
+  
+  
+
+<meta name="author" content="Michiel Noback, PhD">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="embeddeddf.html">
+<link rel="next" href="lines-helpers-regression-lines-loess-and-density-lines-curves.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.4/datatables.js"></script>
+<link href="libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DAVuR Course Syllabus</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Resources, Exercises and Presentations</a></li>
+<li class="chapter" data-level="2" data-path="usecases.html"><a href="usecases.html"><i class="fa fa-check"></i><b>2</b> Example Use Cases</a><ul>
+<li class="chapter" data-level="2.1" data-path="dfselection.html"><a href="dfselection.html"><i class="fa fa-check"></i><b>2.1</b> Dataframe Selections</a></li>
+<li class="chapter" data-level="2.2" data-path="apply.html"><a href="apply.html"><i class="fa fa-check"></i><b>2.2</b> Apply</a></li>
+<li class="chapter" data-level="2.3" data-path="embeddeddf.html"><a href="embeddeddf.html"><i class="fa fa-check"></i><b>2.3</b> Processing Embedded Dataframes</a></li>
+<li class="chapter" data-level="2.4" data-path="ttest.html"><a href="ttest.html"><i class="fa fa-check"></i><b>2.4</b> Applying statistical tests on Dataframes</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="ttest.html"><a href="ttest.html#intro"><i class="fa fa-check"></i><b>2.4.1</b> Intro</a></li>
+<li class="chapter" data-level="2.4.2" data-path="ttest.html"><a href="ttest.html#data-exploration"><i class="fa fa-check"></i><b>2.4.2</b> Data exploration</a></li>
+<li class="chapter" data-level="2.4.3" data-path="ttest.html"><a href="ttest.html#the-t-test"><i class="fa fa-check"></i><b>2.4.3</b> The t-test</a></li>
+<li class="chapter" data-level="2.4.4" data-path="ttest.html"><a href="ttest.html#anova"><i class="fa fa-check"></i><b>2.4.4</b> ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="lines-helpers-regression-lines-loess-and-density-lines-curves.html"><a href="lines-helpers-regression-lines-loess-and-density-lines-curves.html"><i class="fa fa-check"></i><b>2.5</b> Lines: Helpers, Regression lines, Loess and Density Lines &amp; Curves</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="lines-helpers-regression-lines-loess-and-density-lines-curves.html"><a href="lines-helpers-regression-lines-loess-and-density-lines-curves.html#drawing-curves-from-functions"><i class="fa fa-check"></i><b>2.5.1</b> Drawing curves from functions</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Analysis and Visualization using R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ttest" class="section level2">
+<h2><span class="header-section-number">2.4</span> Applying statistical tests on Dataframes</h2>
+<div id="intro" class="section level3">
+<h3><span class="header-section-number">2.4.1</span> Intro</h3>
+<p>The t-test (or Student’s t-test) is one of the most used statistical tests. It can help determine whether the means of two samples are differing significantly. This form is the <em>two-sample t-test</em>. In its alternative form, you can compare a single sample to an expected (population) mean (one-sample t-test). An important assumption of the test is that the data follow a normal (Gaussian) distribution (that is why the t-test is one of the <em>parametric tests</em>). If this is not the case (or if you simply don’t want to test for or assume normality), you can use the <em>non-parametric</em> t-test counterpart, the Mann-Whitney U Test. If more that two groups are involved, ANOVA is your go-to guy.</p>
+<p>To investigate the application of these statistical tests on dataframes, we’ll use the built-in dataset called <code>PlantGrowth</code>. This dataset shows the yield of a certain plant species under three different conditions (control and two treatments).</p>
+<p>My initial scientific question is “Is there a difference between the yields under these different conditions?”. My null hypothesis H<sub>0</sub> would therefore be “There is no difference in yield”.</p>
+</div>
+<div id="data-exploration" class="section level3">
+<h3><span class="header-section-number">2.4.2</span> Data exploration</h3>
+<p>Of course, you always visually inspect your data before embarking on a statistical-testing quest:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">with</span>(PlantGrowth, <span class="kw">boxplot</span>(weight <span class="op">~</span><span class="st"> </span>group))</a></code></pre></div>
+<p><img src="IntroR_CourseSyllabus_files/figure-html4/plant_growth_boxplot-1.png" width="672" /></p>
+<p>This plot indicates that the distributions of <em>ctrl</em> and <em>trt1</em> are quite close, and that <em>trt2</em> differs from the others.</p>
+<p>The t-test and ANOVA assume normality. Normality can be roughly assessed from boxplots (as in the figure above - do you know how?), but histograms and density curves are better suited for this purpose. Let’s create a histogram.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">hist</span>(PlantGrowth<span class="op">$</span>weight, </a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">                   <span class="dt">prob=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">                   <span class="dt">main =</span> <span class="ot">NA</span>, </a>
+<a class="sourceLine" id="cb51-4" data-line-number="4">                   <span class="dt">xlab=</span><span class="st">&quot;Yield (g dry weight)&quot;</span>)</a></code></pre></div>
+<p><img src="IntroR_CourseSyllabus_files/figure-html4/plant_growth_hist-1.png" width="672" /></p>
+<p>That looks pretty “normal” doesn’t it? Adding a real normal curve usually helps a lot:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">20</span>,<span class="fl">0.005</span>)</a>
+<a class="sourceLine" id="cb52-2" data-line-number="2">m &lt;-<span class="st"> </span><span class="kw">mean</span>(PlantGrowth<span class="op">$</span>weight)</a>
+<a class="sourceLine" id="cb52-3" data-line-number="3">weight.sd &lt;-<span class="st"> </span><span class="kw">sd</span>(PlantGrowth<span class="op">$</span>weight)</a>
+<a class="sourceLine" id="cb52-4" data-line-number="4"><span class="kw">hist</span>(PlantGrowth<span class="op">$</span>weight, </a>
+<a class="sourceLine" id="cb52-5" data-line-number="5">                   <span class="dt">prob=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb52-6" data-line-number="6">                   <span class="dt">main =</span> <span class="ot">NA</span>, </a>
+<a class="sourceLine" id="cb52-7" data-line-number="7">                   <span class="dt">xlab=</span><span class="st">&quot;Yield (g dry weight)&quot;</span>)</a>
+<a class="sourceLine" id="cb52-8" data-line-number="8"><span class="kw">lines</span>(x, <span class="kw">dnorm</span>(x, <span class="dt">mean=</span>m, <span class="dt">sd=</span>weight.sd), <span class="dt">col=</span><span class="st">&quot;darkred&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="IntroR_CourseSyllabus_files/figure-html4/plant_growth_hist2-1.png" width="672" /></p>
+<p>Alternatively, you can plot the density curve of the data and add the normal distribution.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">density</span>(PlantGrowth<span class="op">$</span>weight), <span class="dt">main =</span> <span class="ot">NA</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.6</span>))</a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">lines</span>(x, <span class="kw">dnorm</span>(x, <span class="dt">mean=</span>m, <span class="dt">sd=</span>weight.sd), <span class="dt">col=</span><span class="st">&quot;darkred&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="IntroR_CourseSyllabus_files/figure-html4/plant_growth_density-1.png" width="672" /></p>
+<p>OK, conclusion: it looks like a normal distribution, albeit not a perfect one. Let’s proceed for now.</p>
+</div>
+<div id="the-t-test" class="section level3">
+<h3><span class="header-section-number">2.4.3</span> The t-test</h3>
+<p>Since t-tests are designed for comparing at most 2 groups, we’ll compare the two groups that are most alike in yield distribution: <em>ctrl</em> and <em>trt1</em>.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">test.result &lt;-<span class="st"> </span><span class="kw">t.test</span>(<span class="dt">x =</span> PlantGrowth<span class="op">$</span>weight[PlantGrowth<span class="op">$</span>group <span class="op">==</span><span class="st"> &quot;ctrl&quot;</span>], </a>
+<a class="sourceLine" id="cb54-2" data-line-number="2">       <span class="dt">y =</span> PlantGrowth<span class="op">$</span>weight[PlantGrowth<span class="op">$</span>group <span class="op">==</span><span class="st"> &quot;trt1&quot;</span>])</a>
+<a class="sourceLine" id="cb54-3" data-line-number="3">test.result</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  PlantGrowth$weight[PlantGrowth$group == &quot;ctrl&quot;] and PlantGrowth$weight[PlantGrowth$group == &quot;trt1&quot;]
+## t = 1.1913, df = 16.524, p-value = 0.2504
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.2875162  1.0295162
+## sample estimates:
+## mean of x mean of y 
+##     5.032     4.661</code></pre>
+<p>It’s as simple as that! To extract the p-value (or any other attribute), use the dollar operator:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">test.result<span class="op">$</span>p.value</a>
+<a class="sourceLine" id="cb56-2" data-line-number="2">test.result<span class="op">$</span>conf.int</a></code></pre></div>
+<pre><code>## [1] 0.2503825
+## [1] -0.2875162  1.0295162
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<p>As you can see, the p-value is 0.250, well above the usual cutoff of 5% (0.05). Therefore, we can conclude that the yields do not differ significantly between the control and treatment 1 plants (and accept the null hypothesis).</p>
+<p>Comparing control versus treatment 2 gives</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">test.result2 &lt;-<span class="st"> </span><span class="kw">t.test</span>(<span class="dt">x =</span> PlantGrowth<span class="op">$</span>weight[PlantGrowth<span class="op">$</span>group <span class="op">==</span><span class="st"> &quot;ctrl&quot;</span>], </a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">       <span class="dt">y =</span> PlantGrowth<span class="op">$</span>weight[PlantGrowth<span class="op">$</span>group <span class="op">==</span><span class="st"> &quot;trt2&quot;</span>])</a>
+<a class="sourceLine" id="cb58-3" data-line-number="3">test.result2</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  PlantGrowth$weight[PlantGrowth$group == &quot;ctrl&quot;] and PlantGrowth$weight[PlantGrowth$group == &quot;trt2&quot;]
+## t = -2.134, df = 16.786, p-value = 0.0479
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.98287213 -0.00512787
+## sample estimates:
+## mean of x mean of y 
+##     5.032     5.526</code></pre>
+<p>And this p-value indicates there may be a statistically relevant effect of treatment 2 (p-value = 0.0478993, just below the 5% cutoff).</p>
+<p>Now, let’s extend this to the situation where you want to apply a t-test over the rows of a dataframe, for example when you have a dataframe holding expression values of genes (rows) in two groups of samples (columns).</p>
+<p>Here is a very simple dataframe to explore this scenario. Columns a through d represent measurements for condition A (e.g. the control group) and e through h condition B (e.g. treatment with a novel drug).</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">gene.expr &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">34</span>, <span class="dv">24</span>, <span class="dv">51</span>),</a>
+<a class="sourceLine" id="cb60-2" data-line-number="2">                        <span class="dt">b =</span> <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">32</span>, <span class="dv">27</span>, <span class="dv">45</span>),</a>
+<a class="sourceLine" id="cb60-3" data-line-number="3">                        <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">17</span>, <span class="dv">26</span>, <span class="dv">21</span>, <span class="dv">49</span>),</a>
+<a class="sourceLine" id="cb60-4" data-line-number="4">                        <span class="dt">d =</span> <span class="kw">c</span>(<span class="dv">18</span>, <span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">53</span>), </a>
+<a class="sourceLine" id="cb60-5" data-line-number="5">                        <span class="dt">e =</span> <span class="kw">c</span>(<span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">29</span>, <span class="dv">44</span>),</a>
+<a class="sourceLine" id="cb60-6" data-line-number="6">                        <span class="dt">f =</span> <span class="kw">c</span>(<span class="dv">16</span>, <span class="dv">34</span>, <span class="dv">26</span>, <span class="dv">42</span>),</a>
+<a class="sourceLine" id="cb60-7" data-line-number="7">                        <span class="dt">g =</span> <span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">31</span>, <span class="dv">31</span>, <span class="dv">41</span>),</a>
+<a class="sourceLine" id="cb60-8" data-line-number="8">                        <span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">28</span>, <span class="dv">30</span>, <span class="dv">43</span>))</a>
+<a class="sourceLine" id="cb60-9" data-line-number="9"><span class="kw">rownames</span>(gene.expr) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SRSSHT&quot;</span>, <span class="st">&quot;GeNPL-1&quot;</span>, <span class="st">&quot;DUNNO&quot;</span>, <span class="st">&quot;WHTVR&quot;</span>)</a>
+<a class="sourceLine" id="cb60-10" data-line-number="10">controls &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>)</a>
+<a class="sourceLine" id="cb60-11" data-line-number="11">treatment &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;e&quot;</span>, <span class="st">&quot;f&quot;</span>, <span class="st">&quot;g&quot;</span>, <span class="st">&quot;h&quot;</span>)</a>
+<a class="sourceLine" id="cb60-12" data-line-number="12">##have a look</a>
+<a class="sourceLine" id="cb60-13" data-line-number="13">gene.expr</a></code></pre></div>
+<pre><code>##          a  b  c  d  e  f  g  h
+## SRSSHT  20 21 17 18 22 16 19 20
+## GeNPL-1 34 32 26 28 33 34 31 28
+## DUNNO   24 27 21 28 29 26 31 30
+## WHTVR   51 45 49 53 44 42 41 43</code></pre>
+<p>I am only interested in the p-value to be able to select the most interesting genes. Here is a custom function to extract this from a row of my dataframe.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">my.t.test &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb62-2" data-line-number="2">    <span class="kw">t.test</span>(x[controls], x[treatment])<span class="op">$</span>p.value</a>
+<a class="sourceLine" id="cb62-3" data-line-number="3">}</a></code></pre></div>
+<p>and now the t-test applied over the rows</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">apply</span>(<span class="dt">X =</span> gene.expr,</a>
+<a class="sourceLine" id="cb63-2" data-line-number="2">      <span class="dt">MARGIN =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb63-3" data-line-number="3">      <span class="dt">FUN =</span> my.t.test)</a></code></pre></div>
+<pre><code>##     SRSSHT    GeNPL-1      DUNNO      WHTVR 
+## 0.87746477 0.53288953 0.08786967 0.02001060</code></pre>
+<p>As you can see, only one gene in this example meets the standard 95% p value cutoff: WHTVR.<br />
+(NB: of course, no multiple testing corrections has been applied here - that is out of scope for this use case).</p>
+</div>
+<div id="anova" class="section level3">
+<h3><span class="header-section-number">2.4.4</span> ANOVA</h3>
+<p>The technique (one-way) Analysis of Variance (ANOVA) is an extension of the two-sample t test for independent groups covering situations where there are more than two groups being compared.
+In one-way ANOVA the data is sub-divided into groups based on a single classification factor.</p>
+<p><strong>Before an ANOVA can be carried out, it has to be determined that the variances for all factors are equal</strong>. You cann do this using the <code>bartlett.test</code> function:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">with</span>(PlantGrowth, <span class="kw">bartlett.test</span>(weight <span class="op">~</span><span class="st"> </span>group))</a></code></pre></div>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  weight by group
+## Bartlett&#39;s K-squared = 2.8786, df = 2, p-value = 0.2371</code></pre>
+<p>From the output we can see that the p-value of 0.2371 is not less than the significance level of 0.05. This means we cannot reject the null hypothesis that the variance is the same for all treatment groups. This means that there is no evidence to suggest that the variance in plant growth is different for the three treatment groups.</p>
+<p>In this example, we will analyse all three groups of the PlantGrowth dataset together. To investigate the differences between these groups, we fit the one-way ANOVA model using the <code>lm</code> function:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">yield.lm &lt;-<span class="st"> </span><span class="kw">lm</span>(weight <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> PlantGrowth)</a></code></pre></div>
+<p>Then, using the <code>summary</code> function, have a look at the parameter estimates and standard errors for the treatment effects:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="kw">summary</span>(yield.lm)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = weight ~ group, data = PlantGrowth)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.0710 -0.4180 -0.0060  0.2627  1.3690 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   5.0320     0.1971  25.527   &lt;2e-16 ***
+## grouptrt1    -0.3710     0.2788  -1.331   0.1944    
+## grouptrt2     0.4940     0.2788   1.772   0.0877 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6234 on 27 degrees of freedom
+## Multiple R-squared:  0.2641, Adjusted R-squared:  0.2096 
+## F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
+<p>The model output indicates some evidence of a difference in the average growth for the 2nd treatment compared to the control group. An analysis of variance (ANOVA) table for this model can be produced via the anova command (passing the linear model object):</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="kw">anova</span>(yield.lm)</a></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: weight
+##           Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
+## group      2  3.7663  1.8832  4.8461 0.01591 *
+## Residuals 27 10.4921  0.3886                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This table confirms that there are differences between the groups which were highlighted in the model summary. The function confint is used to calculate confidence intervals on the treatment parameters, by default 95% confidence intervals:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="kw">confint</span>(yield.lm)</a></code></pre></div>
+<pre><code>##                   2.5 %    97.5 %
+## (Intercept)  4.62752600 5.4364740
+## grouptrt1   -0.94301261 0.2010126
+## grouptrt2   -0.07801261 1.0660126</code></pre>
+<p>The model residuals can be plotted against the fitted values to investigate the model assumptions. First we create a data frame with the fitted values, residuals and treatment identifiers:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1">plant.mod =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Fitted =</span> <span class="kw">fitted</span>(yield.lm),</a>
+<a class="sourceLine" id="cb74-2" data-line-number="2">  <span class="dt">Residuals =</span> <span class="kw">resid</span>(yield.lm), <span class="dt">Treatment =</span> PlantGrowth<span class="op">$</span>group)</a></code></pre></div>
+<p>and then produce the plot:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb75-2" data-line-number="2"><span class="kw">ggplot</span>(plant.mod, <span class="kw">aes</span>(Fitted, Residuals, <span class="dt">colour =</span> Treatment)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="IntroR_CourseSyllabus_files/figure-html4/unnamed-chunk-3-1.png" width="672" /></p>
+<p>We can see that there is no major problem with the diagnostic plot but some evidence of different variabilities in the spread of the residuals for the three treatment groups.</p>
+<p>ALTERNATIVELY, WE COULD HAVE DONE THIS:
+1: fit a model</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">aov</span>(weight <span class="op">~</span><span class="st"> </span>group, <span class="dt">data=</span>PlantGrowth)</a>
+<a class="sourceLine" id="cb76-2" data-line-number="2">fit</a></code></pre></div>
+<pre><code>## Call:
+##    aov(formula = weight ~ group, data = PlantGrowth)
+## 
+## Terms:
+##                    group Residuals
+## Sum of Squares   3.76634  10.49209
+## Deg. of Freedom        2        27
+## 
+## Residual standard error: 0.6233746
+## Estimated effects may be unbalanced</code></pre>
+<p>2: diagnostic plots
+Diagnostic plots provide checks for heteroscedasticity, normality, and influential observerations.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>),<span class="dv">2</span>,<span class="dv">2</span>)) <span class="co"># optional layout </span></a>
+<a class="sourceLine" id="cb78-2" data-line-number="2"><span class="kw">plot</span>(fit)</a></code></pre></div>
+<p><img src="IntroR_CourseSyllabus_files/figure-html4/plant_growth_aov_diagnostics-1.png" width="672" /></p>
+<p>3: evaluate model effects</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">summary</span>(fit) <span class="co"># display Type I ANOVA table</span></a></code></pre></div>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## group        2  3.766  1.8832   4.846 0.0159 *
+## Residuals   27 10.492  0.3886                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="kw">drop1</span>(fit, <span class="op">~</span><span class="st"> </span>. , <span class="dt">test=</span><span class="st">&quot;F&quot;</span>) <span class="co"># type III SS and F Tests</span></a></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## weight ~ group
+##        Df Sum of Sq    RSS     AIC F value  Pr(&gt;F)  
+## &lt;none&gt;              10.492 -25.517                  
+## group   2    3.7663 14.258 -20.316  4.8461 0.01591 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Now suppose we want to apply this to a dataframe of gene expression values, as shown before in the example of the t-test, but now with three instead of two groups:</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1">gene.expr2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">34</span>, <span class="dv">24</span>, <span class="dv">51</span>),</a>
+<a class="sourceLine" id="cb83-2" data-line-number="2">                        <span class="dt">b =</span> <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">32</span>, <span class="dv">27</span>, <span class="dv">45</span>),</a>
+<a class="sourceLine" id="cb83-3" data-line-number="3">                        <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">17</span>, <span class="dv">26</span>, <span class="dv">21</span>, <span class="dv">49</span>),</a>
+<a class="sourceLine" id="cb83-4" data-line-number="4">                        <span class="dt">d =</span> <span class="kw">c</span>(<span class="dv">18</span>, <span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">53</span>), </a>
+<a class="sourceLine" id="cb83-5" data-line-number="5">                        <span class="dt">e =</span> <span class="kw">c</span>(<span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">29</span>, <span class="dv">44</span>),</a>
+<a class="sourceLine" id="cb83-6" data-line-number="6">                        <span class="dt">f =</span> <span class="kw">c</span>(<span class="dv">16</span>, <span class="dv">34</span>, <span class="dv">26</span>, <span class="dv">42</span>),</a>
+<a class="sourceLine" id="cb83-7" data-line-number="7">                        <span class="dt">g =</span> <span class="kw">c</span>(<span class="dv">19</span>, <span class="dv">31</span>, <span class="dv">31</span>, <span class="dv">41</span>),</a>
+<a class="sourceLine" id="cb83-8" data-line-number="8">                        <span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">28</span>, <span class="dv">30</span>, <span class="dv">43</span>),</a>
+<a class="sourceLine" id="cb83-9" data-line-number="9">                        <span class="dt">i =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">32</span>, <span class="dv">22</span>, <span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb83-10" data-line-number="10">                        <span class="dt">j =</span> <span class="kw">c</span>(<span class="dv">18</span>, <span class="dv">33</span>, <span class="dv">21</span>, <span class="dv">52</span>),</a>
+<a class="sourceLine" id="cb83-11" data-line-number="11">                        <span class="dt">k =</span> <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">29</span>, <span class="dv">19</span>, <span class="dv">51</span>),</a>
+<a class="sourceLine" id="cb83-12" data-line-number="12">                        <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">22</span>, <span class="dv">27</span>, <span class="dv">23</span>, <span class="dv">54</span>))</a>
+<a class="sourceLine" id="cb83-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb83-14" data-line-number="14"><span class="kw">rownames</span>(gene.expr2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SRSSHT&quot;</span>, <span class="st">&quot;GeNPL-1&quot;</span>, <span class="st">&quot;DUNNO&quot;</span>, <span class="st">&quot;WHTVR&quot;</span>)</a>
+<a class="sourceLine" id="cb83-15" data-line-number="15">controls &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>)</a>
+<a class="sourceLine" id="cb83-16" data-line-number="16">treatment1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;e&quot;</span>, <span class="st">&quot;f&quot;</span>, <span class="st">&quot;g&quot;</span>, <span class="st">&quot;h&quot;</span>)</a>
+<a class="sourceLine" id="cb83-17" data-line-number="17">treatment2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;i&quot;</span>, <span class="st">&quot;j&quot;</span>, <span class="st">&quot;k&quot;</span>, <span class="st">&quot;l&quot;</span>)</a>
+<a class="sourceLine" id="cb83-18" data-line-number="18">##have a look</a>
+<a class="sourceLine" id="cb83-19" data-line-number="19">gene.expr2</a></code></pre></div>
+<pre><code>##          a  b  c  d  e  f  g  h  i  j  k  l
+## SRSSHT  20 21 17 18 22 16 19 20 20 18 21 22
+## GeNPL-1 34 32 26 28 33 34 31 28 32 33 29 27
+## DUNNO   24 27 21 28 29 26 31 30 22 21 19 23
+## WHTVR   51 45 49 53 44 42 41 43 50 52 51 54</code></pre>
+<p>We need to apply anova to each row and extract the p-value. First, we need the custom function to apply with:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1">my.anova &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb85-2" data-line-number="2">    <span class="co">#define factor</span></a>
+<a class="sourceLine" id="cb85-3" data-line-number="3">    gr.factor &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rep</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;treatment1&quot;</span>, <span class="st">&quot;treatment2&quot;</span>), <span class="dt">each =</span> <span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb85-4" data-line-number="4">    <span class="co">#perform anova</span></a>
+<a class="sourceLine" id="cb85-5" data-line-number="5">    my.oav &lt;-<span class="st"> </span><span class="kw">aov</span>(<span class="dt">formula =</span> expr <span class="op">~</span><span class="st"> </span>group, </a>
+<a class="sourceLine" id="cb85-6" data-line-number="6">                  <span class="dt">data =</span> <span class="kw">data.frame</span>(<span class="dt">expr =</span> x, <span class="dt">group =</span> gr.factor))</a>
+<a class="sourceLine" id="cb85-7" data-line-number="7">    <span class="co">#return p-value</span></a>
+<a class="sourceLine" id="cb85-8" data-line-number="8">    <span class="kw">summary</span>(my.oav)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Pr(&gt;F)&#39;</span>[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb85-9" data-line-number="9">}</a></code></pre></div>
+<p>Now, it’s a simple apply call again:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="kw">apply</span>(<span class="dt">X =</span> gene.expr2, <span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="dt">FUN =</span> my.anova)</a></code></pre></div>
+<pre><code>##       SRSSHT      GeNPL-1        DUNNO        WHTVR 
+## 0.6692884795 0.7638487821 0.0047833839 0.0008448382</code></pre>
+<p>These results indicate a significant effect in genes DUNNO and WHTVR (again, without having applied multiple testing correction!). The next step would be to investigate the effect size (if anything significant has been found). This can be carried out using Tukeys HSD.</p>
+<hr />
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="embeddeddf.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="lines-helpers-regression-lines-loess-and-density-lines-curves.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/MichielNoback/R_data_analysis_and_visualization/edit/master/course_syllabus/01-use_cases.Rmd",
+"text": "Edit"
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

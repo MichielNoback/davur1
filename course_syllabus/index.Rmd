@@ -1,0 +1,201 @@
+---
+title: "Data Analysis and Visualization using R"
+author: "Michiel Noback, PhD"
+date: "last edit: `r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+---
+
+# Resources, Exercises and Presentations
+
+<h2> Resources, Exercises and Presentations</h2>
+
+<h3>Data & Resources</h3>
+
+**Course Data**
+
+In this section all data files used or required for the course presentations or exercises are listed.  
+
+<ul>
+  <li>Whale selenium data:
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/whale_selenium.txt" target = "_blank">whale_selenium.txt</a>
+  </li>
+  <li>Bird observation data: 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/Observations-Data-2014.xlsx" target = "_blank">Observations-Data-2014.xlsx</a> or, as
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/Observations-Data-2014.csv">csv</a>
+  </li>
+  <li>Food constituents: 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/food_constituents.txt" target = "_blank">food_constituents.txt</a>
+  </li>
+  <li> Wine review data:
+    <a href="https://www.kaggle.com/zynicide/wine-reviews/downloads/winemag-data-130k-v2.csv/4" target ="_blank">winemag-data-130k-v2.csv</a>
+  </li>
+</ul>
+
+
+**Resources**
+
+These resources will be used extensively during the course.
+
+- **The R project**  
+The official R language website: <a href = "http://www.r-project.org" target="_blank">www.r-project.org</a>
+- **CRAN**  
+The Comprehensive R Archive Network (<a href = "http://cran.r- project.org" target="_blank">CRAN</a>) is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R
+- **R studio**  
+R studio is the most popular IDE for writing, running, documenting, and maintaining R code projects: [http://www.rstudio.com](http://www.rstudio.com/)
+- **R Markdown**  
+R Markdown is a Markdown “Dialect” used for presenting, documenting and reporting in R: [http://rmarkdown.rstudio.com](http://rmarkdown.rstudio.com/)
+- **R cheat sheet**  
+The [R cheat sheet](https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/misc/R_cheatsheet.pdf) that is also available at the computer exam.
+- **RMarkdown reference**  
+The [RMarkdown reference](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) cards with extensive documentation. Also available at the computer exam!
+- **Swirl course**  
+Swirl course to accompany this course: [http://github.com/MichielNoback/R_Data_Analysis](http://github.com/MichielNoback/R_Data_Analysis)
+- **Bioconductor**  
+Bioconductor provides tools for the analysis and comprehension of high- throughput genomic data: [http://www.bioconductor.org](http://www.bioconductor.org/)
+
+<h3> Exercises</h3>
+
+To work on the exercises, download the Rmarkdown file (right click: save as..)
+and open it in Rstudio. Work on the Exercises and klick "Knit HTML" to generate 
+an HTML report of your work.  
+For your convenience, I also provide a link to the Knitted PDF version.  
+
+<h4>Swirl</h4>
+
+<ul>
+  <li><a href="https://github.com/MichielNoback/R_Data_Analysis" target = "_blank">
+      The swirl course </a>to accompany the lectures and exercises
+  </li>
+</ul>
+
+****  
+
+<h4>Course assignments</h4>
+<ul>
+  <li>Course assignments part 1  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/CourseExercises_part1.Rmd" target = "_blank">Rmd </a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/CourseExercises_part1.pdf" target = "_blank">PDF</a>  | 
+  </li>
+
+  <li>Course assignments part 2  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/CourseExercises_part2.Rmd" target = "_blank">Rmd</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/CourseExercises_part2.pdf" target = "_blank">PDF</a>  | 
+  </li>
+
+  <li>Course assignments part 1 Solutions | 
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/exercises/CourseExercises_part1_SOLUTIONS.html" target = "_blank">HTML </a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/CourseExercises_part1_SOLUTIONS.pdf" target = "_blank">PDF</a>  | 
+  </li>
+
+  <li>Course assignments part 2 Solutions | 
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/exercises/CourseExercises_part2_SOLUTIONS.html" target = "_blank">HTML </a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/CourseExercises_part2_SOLUTIONS.pdf" target = "_blank">PDF</a>  | 
+  </li>
+</ul>
+
+
+****  
+
+**Training exam**  
+
+<ul>
+  <li><a href="https://www.dropbox.com/l/s/JQQMfkcrbYc4XF7rqGvkon" target = "_blank">Training exam zip file</a>
+    Download the zip, extract it and start working on the file training TRAINING_EXAM.Rmd 
+    (pdf view also supplied). Do not use the internet, but only the supplied files and time yourself to a 
+    maximum of 1,5 hours. The actual test will be slightly longer (2 hours). Solutions
+    are supplied but I suggest you only look at these after completing the test.
+  </li> 
+  <li><a href="http://www.bioinf.nl/~michiel/courses/R_minor/training_exam.zip" target = "_blank">Training exam zip file alternative link</a>
+  </li> 
+</ul>
+
+
+<h3>Screencasts</h3>  
+
+<ul>
+  <li>Setting up on a Windows system 
+    <a href="https://www.youtube.com/watch?v=YL3avjNu6Ak" target = "_blank">Youtube</a>
+  </li>
+  <li>Starting with Rstudio 
+    <a href="https://www.youtube.com/watch?v=z0SoenlbJ5k" target = "_blank">Youtube</a>
+  </li>
+</ul>
+
+<h3>Presentations</h3>  
+
+<ul>
+  <li>Introduction: Toolbox | 
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/presentations/01_Introduction_Toolbox.html" target = "_blank">HTML</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/01_Introduction_Toolbox.pdf" target = "_blank">PDF</a> |  
+    This is the general introduction of the course. It gives a brief overview of the tools in the R toolbox:
+    
+- The programming language R
+- The Integrated Development Environment (IDE) RStudio)
+- RMarkdown, the technology to create well-formatted documents with embedded R code and its output
+- SWIRL, the interactive learning environment for R  
+
+  <br />
+  </li>
+
+  <li>Basic R | 
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/presentations/02_basic_R.html" target = "_blank">HTML</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/02_basic_R.pdf" target = "_blank">PDF</a>  |  
+The basic datatypes and functionality of R are explored, as well as some plotting techniques: scatter plot, histogram, and boxplot.
+
+  <br />
+  </li>
+
+  <li>Complex Datatypes |
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/presentations/03_complex_datatypes.html" target = "_blank">HTML</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/03_complex_datatypes.pdf" target = "_blank">PDF</a> |  
+You will get to know the more complex of the R data types: 
+    
+- factor (actually a base data type, but complex in its use)
+- list which is the type that can hold any type of any length 
+- dataframe, the mother of all datatypes, which is actually also a list albeit a special one. You will see how to create them and manipulate them on a basic level. This section also shows a _sunny day scenario_ for reading data from file.
+
+  <br />
+  </li>
+
+  <li>Functions |
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/presentations/04_functions.html" target = "_blank">HTML</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/04_functions.pdf" target = "_blank">PDF</a>  |  
+Functions are explored here. Functions are reusable pieces of code. In this presentation, a variety of funcion-related aspects of R are presented:  
+    
+- Descriptive statistics functions
+- Sorting and ordering
+- General purpose functions (e.g.. `paste`, `str`, `cut`)
+- Advanced usage of `read.table()`
+- Writing data to file
+- Flow control
+- Creating functions
+
+  <br />
+  </li>
+
+  <li>Dataframe manipulations | 
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/presentations/05_dataframe_manipulations.html" target = "_blank">HTML</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/05_dataframe_manipulations.pdf" target = "_blank">PDF</a> |  
+Here, all functions and techniques used fo manipulating dataframes (and lists) are discussed. These include  
+
+- `with` to create a local scope/environment
+- `subset` to make advanced and readable selections
+- `apply` and its relatives `lapply`, `sapply`, `tapply`
+- `aggregate`
+- `split` and `merge`
+
+  <br />
+  </li>
+
+  <li>Sampling and testing | 
+    <a href="http://htmlpreview.github.io/?https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/presentations/06_sampling_and_testing.html" target = "_blank">HTML</a>  | 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/06_sampling_and_testing.pdf" target = "_blank">PDF</a>  |  
+Some remaining topics are reviewed here:  
+
+- Random sampling of a distribution, a predefined set, or range of numbers
+- Statistitcal tests (`t.test`, `aov`, `chisq.test`)
+
+    </li>
+</ul>

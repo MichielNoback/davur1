@@ -1,0 +1,481 @@
+---
+title: "Data analysis and visualization using R"
+author: "Michiel Noback"
+date: "september 2015"
+output:
+  beamer_presentation:
+    colortheme: dolphin
+    fig_caption: no
+    toc: yes
+  ioslides_presentation: default
+subtitle: using and writing functions in R
+job: lecturer at Hanze University of Applied Science
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F}
+##comment this out for pdf output
+source("rmarkdown_knitr_header.R")
+```
+
+```{r echo = F}
+par(mar=c(2,2,0,0))
+```
+
+## Contents
+
+- Descriptive statistics
+- Sort/order
+- General purpose functions
+- Reading and writing textual data
+- Flow control
+- Creating your own functions
+
+# Descriptive statistics
+
+## Descriptive stats functions
+
+- R provides a wealth of descriptive statistics functions
+- They are listed on the next two slides
+
+## Descriptive statistics functions (1)
+
+| function    |  purpose             | 
+|-------------|----------------------| 
+| mean( )     | mean                 | 
+| median( )   | median               | 
+| var( )      | variance s^2         | 
+| sd( )       | standard deviation s | 
+| min( )      | minimum              | 
+| max( )      | maximum              | 
+| range( )    | min and max          | 
+
+## Descriptive statistics functions (2)
+
+| function    |  purpose             | 
+|-------------|----------------------| 
+| quantile( ) | quantiles            | 
+| IQR( )      | interquantile range  | 
+| summary( )  | 6-number summary     | 
+| hist( )     | histogram            | 
+| boxplot( )  | boxplot              | 
+
+
+## The `quantile()` function
+
+- Gives the data alues corresponding to the specified quantiles
+- Defaults to `0%  25%  50%  75% 100%`
+
+```{r}
+quantile(ChickWeight$weight)
+quantile(ChickWeight$weight, probs = seq(0, 1, 0.2))
+```
+
+## Interquantile range `IQR()`
+
+- Gives the range between 25% and 75% quantiles
+
+```{r}
+IQR(ChickWeight$weight)
+## same as
+quantile(ChickWeight$weight)[4] - quantile(ChickWeight$weight)[2]
+```
+
+## `boxplot()` is a picture of `summary()`
+
+- Boxplot is a graph of the 5-number summary, but `summary()` also gives the mean 
+
+
+```{r box_demo, fig.height=2.5, fig.width=3}
+summary(ChickWeight$weight)
+boxplot(ChickWeight$weight)
+```
+
+# Sorting and ordering
+
+## Sort and Order
+
+- `sort()` sorts a vector
+- `order()` returns a vector representing the ordered status of a vector
+
+```{r sort_order}
+x <- c(2, 4, 6, 1, 3)
+sort(x)
+ordr <- order(x); ordr
+x[ordr]
+```
+
+
+## Use order when order matters
+
+When you use `sort()`, a vector will be shuffled in-place. This is ususally *NOT* desirable when coupled vectors are being analysed (as in the most used data type Dataframes!)
+
+
+## Sorting dataframes
+
+```{r sorting_dataframe}
+geneNames <- c("P53","BRCA1","VAMP1", "FHIT")
+sig <- c(TRUE, TRUE, FALSE, FALSE)
+meanExp <- c(4.5, 7.3, 5.4, 2.4)
+genes <- data.frame(
+    "name" = geneNames,
+    "significant" = sig,
+    "meanExp" = meanExp)
+genes
+
+## sort on gene name
+genes[order(genes$name), ]
+```
+
+
+## Multilevel sorting
+
+You can also sort on multiple properties:
+
+```{r multilevel_sorting}
+students <- data.frame(
+    "st.names" = c("Henk", "Piet", "Sara", "Henk", "Henk"),
+    "st.ages" = c(22, 23, 18, 19, 24))
+students[order(students$st.names, students$st.ages), ]
+```
+
+
+# Some general purpose functions (part 1)
+
+## Remove objects from memory
+
+- When working with large datasets it may be usefull to free them from memory when no longer needed 
+- i.e. intermediate results
+- use `rm()` to do this: `rm(genes)`, `rm(x, y, z)`
+
+
+## File system operations
+
+- `getwd()` returns the current working directory
+- `setwd()` sets the current working directory
+- `dir()`, `dir(path)` lists the contents of the current directory or of *path*
+- *path* can be defined as
+    - Windows: `"E:\\emile\\datasets"`
+    - Linux/Mac: `"~/datasets"` or `"/home/emile/datasets"`
+
+
+# Reading and writing textual data
+
+## Text data formats
+
+Textual data comes in many forms. Here are a few examples:
+
+`DesertBirdCensus.csv`
+```
+Species,"Count"
+Black Vulture,64
+Turkey Vulture,23
+Harris's Hawk,3
+Red-tailed Hawk,16
+American Kestrel,7
+```
+
+-----
+
+`BED_file.txt`
+```
+browser position chr7:127471196-127495720
+browser hide all
+track name="ItemRGBDemo" description="Item RGB demonstration" visibility=2
+itemRgb="On"
+chr7    127471196  127472363  Pos1  0  +  127471196  127472363  255,0,0
+chr7    127472363  127473530  Pos2  0  +  127472363  127473530  255,0,0
+chr7    127473530  127474697  Pos3  0  +  127473530  127474697  255,0,0
+chr7    127474697  127475864  Pos4  0  +  127474697  127475864  255,0,0
+chr7    127475864  127477031  Neg1  0  -  127475864  127477031  0,0,255
+chr7    127477031  127478198  Neg2  0  -  127477031  127478198  0,0,255
+```
+
+-----
+
+`mySNPdata.vcf`
+```
+##fileformat=VCFv4.0
+##fileDate=20100501
+##reference=1000GenomesPilot-NCBI36
+##assembly=ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/sv/breakpoint_assemblies.fasta
+##INFO=<ID=BKPTID,Number=-1,Type=String,Description="ID of the assembled alternate allele in the assembly file">
+##ALT=<ID=DEL,Description="Deletion">
+##ALT=<ID=CNV,Description="Copy number variable region">
+##FORMAT=<ID=GT,Number=1,Type=Integer,Description="Genotype">
+#CHROM  POS   ID  REF ALT   QUAL  FILTER  INFO  FORMAT  NA00001
+1 2827693   . CCGTGGATGCGGGGACCCGCATCCCCTCTCCCTTCACAGCTGAGTGACCCACATCCCCTCTCCCCTCGCA  C . PASS  SVTYPE=DEL;END=2827680;BKPTID=Pindel_LCS_D1099159;HOMLEN=1;HOMSEQ=C;SVLEN=-66 GT:GQ 1/1:13.9
+2 321682    . T <DEL>   6 PASS    IMPRECISE;SVTYPE=DEL;END=321887;SVLEN=-105;CIPOS=-56,20;CIEND=-10,62  GT:GQ 0/1:12
+2 14477084  . C <DEL:ME:ALU>  12  PASS  IMPRECISE;SVTYPE=DEL;END=14477381;SVLEN=-297;MEINFO=AluYa5,5,307,+;CIPOS=-22,18;CIEND=-12,32  GT:GQ 0/1:12
+3 9425916   . C <INS:ME:L1> 23  PASS  IMPRECISE;SVTYPE=INS;END=9425916;SVLEN=6027;CIPOS=-16,22;MIINFO=L1HS,1,6025,- GT:GQ 1/1:15
+3 12665100  . A <DUP>   14  PASS  IMPRECISE;SVTYPE=DUP;END=12686200;SVLEN=21100;CIPOS=-500,500;CIEND=-500,500   GT:GQ:CN:CNQ  ./.:0:3:16.2
+4 18665128  . T <DUP:TANDEM>  11  PASS  IMPRECISE;SVTYPE=DUP;END=18665204;SVLEN=76;CIPOS=-10,10;CIEND=-10,10  GT:GQ:CN:CNQ  ./.:0:5:8.3
+```
+
+## Data file structure
+
+Whatever the contents of a file, you always need to address (some of) these questions:
+
+- Are there comment lines at the top?
+- Is there a header line with column names?
+- What is the column separator? (fixed width?)
+- Are there quotes around character data?
+- How are missing values encoded?
+- How are numeric values encoded?
+- What is the type in each column?
+    - character / numeric / factor / date/time
+
+## Some `read.table()` arguments
+
+| arg              | specifies          | example           | 
+|------------------|--------------------|-------------------| 
+| **sep**          | field separator    | sep = ":"         | 
+| **header**       | is there a header  | header = F        | 
+| **dec**          | decimal format     | dec = ","         | 
+| **comment.char** | comment line start | comment.char = "" | 
+| **na.strings**   | NA value           | na.strings = "-"  | 
+| **as.is**        | load as character  | as.is = c(1,4)    | 
+
+
+## Writing data to file
+
+- writing a data frame / matrix / vector to file:
+- `write.table(myData, file="file.csv")`
+- Standard is a comma-separated file with both column- and row names, unless otherwise specified:
+    - `col.names = F`
+    - `row.names = F`
+    - `sep = ";"`
+    - `sep = "\t" # tab-separated`
+
+## Writing plot to file
+
+- You can use a redirect to write a plot to file 
+- Usually this will be a png file
+- Use `width` and `height` to specify size
+- Default unit is pixels
+- Use other unit: `units = "mm"`
+
+```{r eval = F}
+png("/path/to/your/file.png",
+    width = 700, height = 350, units = "mm")
+plot(cars)
+dev.off()
+```
+
+
+# Some general purpose functions (part 2)
+
+## Glueing text pieces: `paste()`
+
+- Use `paste()` to combine elements into a string
+
+```{r paste_demo}
+paste(1, 2, 3)
+paste(1, 2, 3, sep="-")
+paste(1:12, month.abb)
+```
+
+
+## Investigate structure: `str()`
+
+- Use `str()` to investigate the structure of a complex object
+
+```{r str_demo}
+str(chickwts)
+```
+
+
+## Convert numeric vector to factor: `cut()`
+
+Sometimes, it is useful to work with a factor (ordinal) instead of a numeric vector (interval or ratio scale). For instance, when working with Body Mass Index (bmi) related variables, it may be noce to split this into a factor for further processing.
+
+The function `cut()` can be used for this.
+
+## `cut()` demo
+- suppose you have the following dataset
+
+```{r, tidy = F}
+## body mass index
+bmi <- c(22, 32, 21, 37, 28,   34, 26, 29, 41, 18,   22, 27, 32, 31, 26)
+## year income * 1000 euros
+income <- c(23, 14, 20, 13, 47,   15, 38, 29, 12, 25,   33, 24, 19, 42, 38)
+my.data <- data.frame(bmi = bmi, income = income)
+```
+
+
+-----
+
+
+- You can of course look at income as a function of bmi using a plot:
+
+```{r cut_demo_2, fig.height = 3, fig.width = 6, results = "hold"}
+with(my.data, plot(income ~ bmi))
+```
+
+
+-----
+
+
+- but wouldn't it be nice to look at the bmi categories as defined by the WHO? - use `cut()`
+
+
+```{r cut_demo_3, fig.height = 3, fig.width = 6, results = "hold"}
+my.data$bmi.class <- cut(bmi,
+    breaks = c(0, 18.5, 25.0, 30.0, Inf), right = F,
+    labels = c("underweight", "normal", "overweight", "obese"),
+    ordered_result = T)
+with(my.data, boxplot(income ~ bmi.class))
+```
+
+
+
+# Flow control
+
+## what is flow control
+
+- used to control the execution of different commands
+- these structures are used for flow control  
+    - if(){} else if(){} else{} 
+    - for(){}
+    - while(){}
+
+## if and else
+
+- Since flow control is used primarily within functions it is dealt with here
+- The first is `if & else` for conditional code 
+
+```{r ifelse_demo}
+x <- 43
+if (x > 40) {
+    print("TRUE")
+} else {
+    print("FALSE")
+}
+
+```
+
+
+## if/else real life example
+
+- this code chunk checks if a file exists and only downloads it if it is not present
+
+```{r eval=FALSE}
+my_data_file <- "/some/file/on/disk"
+## fetch file
+if (!file.exists(my_data_file)) {
+    print(paste("downloading", my_data_file))
+    download.file(url = remote_url, destfile = my_data_file)
+} else {
+    print(paste("reading cached copy of", my_data_file))
+}
+```
+
+
+## ifelse ternary
+
+There is also a shorthand for `if(){}else{}`
+
+```{r ternary_op}
+a <- 3
+x <- if (a == 1) 1 else 2
+x
+```
+
+
+## for 
+
+- `for` is used for looping vectors
+- However, the prefered way to do this is by `apply()` and its relatives (see above)
+
+```{r forring1}
+for (i in 1:3) {
+    print(i)
+}
+```
+
+## for 
+
+- Sometimes, a `for` loop is handy with index
+
+```{r forring2}
+x <- c("foo", "bar", "baz")
+for (i in 1 : length(x)) {
+    print(x[i])
+}
+```
+
+
+
+# Creating functions
+
+## Functions are reusable code
+
+- Functions are named pieces of code with a single well-defined purpose
+- They ususally have some data as input: **arguments**
+- They usually have some **return** value
+
+## A first function
+
+- Here is a simple function determining whether some number is even
+
+```{r first_function}
+IsEven <- function(x) {
+    y <- x %% 2 == 0
+    return(y) ##explicit return not required 
+}
+IsEven(1:5)
+```
+
+
+## Function basics
+
+- The result of the last statement within a function is the return value of that function
+- Use `return()` for forcing return values at other points:
+
+```{r return_values}
+MyMessage <- function(age) {
+    if (age < 18) return("have a lemonade!")
+    else return("have a beer!")
+}
+MyMessage(20)
+```
+
+
+## Default argument values
+
+- Use default values for function arguments whenever possible
+- Almost all functions in R packages have many arguments with default values
+
+```{r default_args}
+MyPower <- function(x, power = 2) {
+    x ^ power
+}
+MyPower(10, 3) ## custom power
+MyPower(10) ## defaults to 2
+```
+
+
+## Errors and warnings
+
+- When someting is not right, but not enought to quit execution, use a warning to let the user (or yourself) know
+- `warning("I am not happy")`
+- When something is terribly wrong, stop execution with an error message
+- `stop("I can't go on")`
+
+## Errors and warnings demo
+
+```{r errors, eval = F}
+DemoInv <- function(x) {
+    if (!is.numeric(x)) {
+        stop("non-numeric vector")
+    }
+    return(x/3)
+}
+b <- DemoInv(c("a", "b")) # b not created!
+b <- DemoInv(1:4)
+```
+
+```
+> b <- DemoInv(c("a", "b")) # b not created!  
+Error in DemoInv(c("a", "b")) : non-numeric vector  
+> b <- DemoInv(1:4)
+```

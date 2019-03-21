@@ -1,0 +1,297 @@
+---
+title: "Exercises part 2"
+author: "<YOUR NAME>"
+date: "<YOUR DATE>"
+output: pdf_document
+subtitle: 'Course: Data analysis and visualization using R'
+---
+
+
+
+```{r setup, echo = FALSE, include = FALSE}
+################################################################
+## THIS IS SETUP CODE - DO NOT EDIT!!!                        ##
+## If this fails you may need to install the devtools package ##
+################################################################
+library(devtools)
+labelerURL <- "https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/labeler.R"
+#labelerURL <- "labeler.R"
+source_url(labelerURL)
+#source(labelerURL)
+labelMaker <- labeler(l1Counter = 3) ## will start section number at 4
+################################################################
+## END OF SETUP CODE                                          ##
+################################################################
+```
+
+
+
+## `r labelMaker$getSection()` `apply` and its relatives
+
+In this section you will encounter some exercises revolving around the different flavours of apply.
+
+### **`r labelMaker$getExercise()` ** 
+
+On the course website, you will find file [whale_selenium.txt](http://www.bioinf.nl/~michiel/courses/R_minor/data/whale_selenium.txt). You could download it into your working directory manually or use `download.file()`, but you can also read it directly using `read.table()` as shown here.
+
+```{r eval=TRUE}
+whale.selenium <- read.table(
+    "https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/presentations/data/whale_selenium.txt",
+    header = T,
+    row.names = 1)
+head(whale.selenium)
+```
+
+
+**`r labelMaker$getLetter(reset = T)`** 
+Report the means of both columns using apply().
+
+```{r}
+apply(X = whale.selenium, MARGIN = 2, FUN = mean)
+```
+
+**`r labelMaker$getLetter()`** 
+Report the standard deviation of both columns, again using apply.
+
+```{r}
+apply(X = whale.selenium, MARGIN = 2, FUN = sd)
+```
+
+**`r labelMaker$getLetter()`** 
+Report the standard error of the mean of both columns, again using apply. The SEM is calculated as $$\frac{s}{\sqrt{n}}$$ where $s$ is the sample standard deviation and $n$ the number of measurements. You should create the function calculating this statistic yourself.
+
+```{r}
+my.sem <- function(x) {
+    sem <- sd(x) / sqrt(length(x))
+}
+apply(X = whale.selenium, MARGIN = 2, FUN = my.sem)
+```
+
+**`r labelMaker$getLetter()`** 
+Using apply, calculate the ratio of $Se_{tooth} / Se_{liver}$ and attach it to the whale.selenium dataframe as column `ratio`. Create a histogram of this ratio.
+
+```{r fig.width = 4.5, fig.height = 3.5}
+whale.selenium$ratio <- apply(X = whale.selenium, 
+      MARGIN = 1, 
+      FUN = function(x){
+          x[2] / x[1]
+      })
+hist(whale.selenium$ratio,
+     xlab = "Tooth / Liver Selenium ratio",
+     main = "Histogram of Tooth / Liver Selenium ratios")
+```
+
+
+**`r labelMaker$getLetter()`** 
+Using print and paste, report the mean and the standard deviation of the ratio column, but do this with an inline expression, e.g. an expression embedded in the Rmarkdown text.
+
+**The mean of the ratios is `r mean(whale.selenium$ratio)` and the standard deviation is `r sd(whale.selenium$ratio)`**
+
+
+
+### **`r labelMaker$getExercise()` ** 
+This exercise revolves around the `ChickWeight` dataset of the built-in `datasets` package. 
+
+**`r labelMaker$getLetter(reset = T)`** 
+Use an R expression to report the number of chickens used in the experiment. 
+
+```{r}
+#MANY WAYS TO GET THERE
+length(split(ChickWeight, ChickWeight$Chick))
+#OR
+sum(tapply(ChickWeight$Diet, ChickWeight$Chick, FUN = function(x){1}))
+#OR
+length(unique(ChickWeight$Chick))
+#OR
+nrow(aggregate(x = ChickWeight, by = list(ChickWeight$Chick), FUN = function(x){x}))
+```
+
+**`r labelMaker$getLetter()`** 
+Use `aggregate()` to get the mean weight of the chickens for the different Diets. 
+
+```{r}
+aggregate(formula = weight ~ Diet, data=ChickWeight, FUN = mean, na.rm = T)
+#OR
+aggregate(x = ChickWeight$weight, by = list(Diet = ChickWeight$Diet), FUN = mean, na.rm = T)
+```
+
+**`r labelMaker$getLetter()`** 
+Use `coplot()` to plot a panel with weight as function of Time, split over Diet. 
+
+```{r}
+coplot(weight ~ Time | Diet, data = ChickWeight, panel = panel.smooth)
+```
+
+**`r labelMaker$getLetter()`** 
+
+Add a column called `weight.gain` to the dataframe holding values for the weight gain since the last measurement. Take special care with rows marking the boundaries between indivivdual chickens! You could consider using a traditional for loop here.
+
+```{r}
+#A naive for-loop here - is this the best solution?
+ChickWeight$weight.gain <- NA #create the column with missing values
+for (i in 1:nrow(ChickWeight)) {
+    #skip first row and rows that are preceded by values for another chick
+    if (i > 1 && ChickWeight$Chick[i] == ChickWeight$Chick[i-1]) {
+        ChickWeight[i, "weight.gain"] <- ChickWeight$weight[i] - ChickWeight$weight[i-1] 
+    }
+}
+#stored.weight.gain <- ChickWeight$weight.gain
+#save(stored.weight.gain, file = "./data/ChickWeight_weight_gain.Rdata")
+```
+
+**`r labelMaker$getLetter()`** 
+
+Split the `weight.gain` column on Diet and report the mean, median and standard deviation for each diet. 
+Note, if you were not succesful in the previous question, load and attach the data from file `ChickWeight_weight_gain.Rdata` downloadable from `https://github.com/MichielNoback/R_data_analysis_and_visualization/blob/master/exercises/data/ChickWeight_weight_gain.Rdata` (click on button "Raw" to download and use `load()` to load variable `stored.weight.gain`). 
+
+```{r}
+tapply(X = ChickWeight$weight.gain, INDEX = ChickWeight$Diet, FUN = mean, na.rm = T)
+#or with aggregate
+aggregate(formula = weight.gain ~ Diet, data = ChickWeight, FUN = median)
+#or with split and sapply
+sapply(split(ChickWeight[, "weight.gain"], ChickWeight$Diet), sd, na.rm = T)
+```
+
+**`r labelMaker$getLetter()`** 
+
+Create a (single-panel) boxplot for weight gain, split over Diet. Hint: read the `boxplot()` help page!
+
+```{r fig.width = 4.5, fig.height = 3.5}
+boxplot(weight.gain ~ Diet, data = ChickWeight)
+```
+
+
+
+### **`r labelMaker$getExercise()` ** 
+The [food constituents dataset](https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/food_constituents.txt) on the course website holds information on ingredients for different foods. Individual foods are simply marked with an id. 
+
+**`r labelMaker$getLetter(reset = T)`** 
+Load the data and report the different food categories. 
+
+```{r}
+foods <- read.table(
+    "https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/food_constituents.txt", header = T)
+levels(foods$Type)
+```
+
+**`r labelMaker$getLetter()`** 
+What is the mean energy content of chocolate foods?
+
+```{r}
+mean(foods[foods$Type == "chocolate", "kcal"])
+```
+
+**`r labelMaker$getLetter()`** 
+What is the food category with the highest mean fat content?
+
+```{r}
+#aggregate over Type
+mean.fat <- aggregate(formula = fat.total ~ Type, data = foods, FUN = mean)
+#order and select first
+mean.fat[order(mean.fat$fat.total, decreasing = T)[1], ]
+```
+
+**`r labelMaker$getLetter()`** 
+What food category has the highest mean energy content, and which has the lowest?
+
+```{r}
+mean.energy <- aggregate(formula = kcal ~ Type, data = foods, FUN = mean)
+mean.energy[order(mean.energy$kcal)[1], ]
+mean.energy[order(mean.energy$kcal, decreasing = T)[1], ]
+```
+
+**`r labelMaker$getLetter()`** 
+**Challenge ahead!** Create a boxplot showing the difference in sugar content between drink and solid food.
+
+```{r fig.width = 4.5, fig.height = 3.5}
+#more verbose means possible; this efficient way demonstrating use of %in%
+foods$solid.state <- !foods$Type %in% c("milk", "beverage")
+boxplot(formula = carb.sugar ~ solid.state, 
+        data = foods,
+        main = "Sugar content of foods categories", 
+        names = (c("Drink", "Solid")),
+        ylab = "Sugar (g/100g product)")
+```
+
+**`r labelMaker$getLetter()`** 
+Assuming both unsaturated fats and sugar are bad for you, what food category do you consider the worst? Thiink of a means to answer this, explain it and carry it out.
+
+```{r}
+## YOUR CODE HERE
+```
+
+
+
+
+### **`r labelMaker$getExercise()` ** 
+This exercise revisits the [GOLDEN GATE AUDUBON SOCIETY](http://goldengateaudubon.org/birding-resources/observations/) dataset downloaded and prepared in the a previous exercise. I hope you still have the csv version of it. If it got lost, download it again. Again, open the file in Excel, replace all occurrences of the ";" character to "," and use "Save as.." to save it as ".csv" file (Comma-separated). Alternatively, download it from [the course website](http://www.bioinf.nl/~michiel/courses/R_minor/data/Observations-Data-2014.xlsx). Load the dataset.
+
+```{r}
+##reload the data
+bird.obs <- read.table("data/Observations-Data-2014.csv",
+                sep=";",
+                head=T,
+                na.strings = "",
+                quote = "",
+                comment.char = "",
+                as.is = c(1, 6, 7, 8, 13))
+bird.obs$Count <- as.integer(bird.obs$Number)
+```
+
+**`r labelMaker$getLetter(reset = T)`** 
+Report the number of observations per `County`. Use both a textual as a barplot representation. With the barplot, you should order the bars according to observation numbers. 
+
+```{r, fig.width = 8, fig.height=5}
+c.split <- split(x = bird.obs, f = bird.obs$County)
+c.counts <- sapply(c.split, nrow)
+barplot(c.counts[order(c.counts, decreasing = T)],
+        main = "Bird observations per county",
+        ylab = "Observations",
+        las = 2)
+```
+
+**`r labelMaker$getLetter()`** 
+Report the number of observations per `Observer.1`, ordered from high to low observation count, but only those Observers with more than 10 observations into this dataset.
+
+```{r}
+obs.split <- split(x = bird.obs, f = bird.obs$Observer.1)
+obs.counts <- sapply(obs.split, nrow)
+obs.counts <- obs.counts[obs.counts > 10]
+obs.counts[order(obs.counts, decreasing = T)]
+```
+
+**`r labelMaker$getLetter()`** 
+Which observer has the highest number of observations listed (and how many is that)? 
+
+```{r}
+obs.counts[order(obs.counts, decreasing = T)][1]
+```
+
+**`r labelMaker$getLetter()`** 
+Report the different observed species, using `Common.name`, for each genus. **Challenge: Report only the 5 Genera with the highest number of observed species**.  
+
+```{r}
+g.split <- split(bird.obs, bird.obs$Genus)
+g.species <- lapply(g.split, function(x) {
+    unique(x$Common.name)
+})
+#create ordering
+g.species.count <- sapply(g.species, length)
+g.order <- order(g.species.count, decreasing = T)
+#apply order to list and select only first five
+g.species[g.order[1:5]]
+```
+
+**`r labelMaker$getLetter()`** 
+**Challenge!** Create a Dataframe holding the number of birds per day (use Date.start) and plot it with date on the x-axis and number of birds on the y-axis. Hint: use `as.Date()` to convert the character date to a real date field. See this page how you can do that [Date Values](http://www.statmethods.net/input/dates.html).
+
+
+```{r}
+bird.obs$Date.start <- as.Date(bird.obs$Date.start, format = "%d-%b-%y")
+date.series <- aggregate(Count ~ Date.start, data = bird.obs, FUN = sum, na.rm = T)
+#2024 is an error input, remove it
+date.series <- date.series[1:nrow(date.series)-1, ]
+plot(x = date.series$Date.start, y = date.series$Count, ylim = c(0, 250))
+```
+
+

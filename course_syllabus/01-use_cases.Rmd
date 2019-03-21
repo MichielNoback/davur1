@@ -1,0 +1,585 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+# Example Use Cases {#usecases}
+
+In this chapter, some example use cases will be presented demonstrating some concept or function.
+The topics for these use cases are selected because they appear to be harder to comprehend for my students, are a bit out of scope for the lectures, or because they are simply too extensive to fit into a few slides of a presentation.  
+
+## Dataframe Selections {#dfselection}
+
+R offers a wealth of methods to make selection on dataframes by columns, rows, or both.
+
+We'll explore the `iris` dataset, a dataframe holding morphological data on several species of plants from the genus _Iris_:
+
+```{r iris_table}
+DT::datatable(iris)
+```
+
+There are only three species in this dataset
+
+```{r show_iris_species}
+table(iris$Species)
+```
+
+but how do they relate to each other with repect to Sepal length?
+
+```{r boxplot_sepal_length}
+with(iris, boxplot(Sepal.Length ~ Species,
+                   ylab = "Sepal length (cm)",
+                   xlab = "Iris species"))
+```
+
+Now suppose I want to get the data from _virginica_ plants that have a Sepal length smaller than the largest Sepal length of _setosa_ plants?
+First of course we'll need the maximum of the _setosa_ plants:
+
+```{r get_max_sepal}
+max.setosa <- max(iris[iris$Species == "setosa", "Sepal.Length"])
+max.setosa
+```
+
+Which plant is it? Let's use the subset function to find out.
+
+```{r get_max_sepal_plant}
+subset(x = iris,
+       subset = (Species == "setosa" & Sepal.Length == max.setosa))
+```
+
+Now filter out the _virginica_ plants that have a Sepal length smaller than this value. I'll show two approaches, one with logical indexing and one with `subset`
+
+```{r get_small_virginicas_logical}
+##get a logical for small plants
+logi.small.sepal <- iris$Sepal.Length < max.setosa
+logi.small.sepal
+##get a logical for virginica plants
+logi.virginica <- iris$Species == "virginica"
+logi.virginica
+##combine the two via a boolean operation
+logi.both <- logi.small.sepal & logi.virginica
+logi.both
+##use it as a selector on the rows of the iris DF
+iris[logi.both, ]
+```
+
+Of course, you will usually perform this selection in one statement, but the operations carried out by R will be exactly the same (but without creating any variables of course):
+
+```{r get_small_virginicas_fast}
+iris[iris$Sepal.Length < max.setosa & iris$Species == "virginica", ]
+```
+
+The function `subset` will do the same behind the scenes, but your code may be more to your liking:
+
+```{r get_small_virginicas_subset}
+subset(x = iris,
+       subset = Sepal.Length < max.setosa & Species == "virginica")
+```
+
+By the way, **beware to use only one boolean and: &, not &&**. This will not give an error but only an empty result set
+
+```{r get_small_virginicas_subset_two_ands}
+subset(x = iris,
+       subset = Sepal.Length < max.setosa && Species == "virginica")
+```
+
+> & and && indicate logical AND and | and || indicate logical OR. The shorter form performs elementwise comparisons in much the same way as arithmetic operators. The longer form evaluates left to right examining only the first element of each vector. Evaluation proceeds only until the result is determined. The longer form is appropriate for programming control-flow and typically preferred in if clauses.  
+
+Can you figure out why using `&&` would give an empty set in the above case?
+
+See [The R manual](http://stat.ethz.ch/R-manual/R-patched/library/base/html/Logic.html) for details.
+
+-----  
+
+## Apply {#apply}
+
+Consider the `women` dataset, holding height and weight of a population sample of 15 women:
+
+```{r women_table}
+DT::datatable(women,
+              options = list("pageLength" = 15),
+              colnames = c("Woman", names(women)))
+```
+
+To calculate the average height and the average weight of this sample, one could of course simply do 
+
+```{r naive_means}
+with(women, {
+    print(mean(height))
+    print(mean(weight))
+})
+```
+
+However, when your dataset has (a lot) more columns, repeating this will be quite tedious...unless you use a `for` loop
+
+```{r means_with_for}
+for (i in 1:length(women)) {
+    print(mean(women[,i]))
+}
+```
+
+Enter `apply()`, a very nice function to do this in a handy one-liner
+
+```{r means_with_apply}
+apply(X = women, MARGIN = 2, FUN = mean)
+```
+
+The arguments I supplied to `apply`have the following purpose:  
+
+1. `X = women` specifies the data to be processed
+2. `MARGIN = 2` specifies wether columns or rows shoud be processed; 1 = rows and 2 = columns
+3. `FUN = mean` speciefies the function to be applied to the given dataframe
+
+
+Not only gives apply the the exact same result (of course, duh), but this approach has several advantages:
+
+- `apply` returns a named vector where the elements are named the same as the corresponding columns of the original dataframe
+- `apply` is computationally more efficient than the other approaches
+- it requires less code; a good programmer types as little as possible - except for Java programmers of course :-)
+
+If you really have strongh feelings about typing no more than strictly required, you can of course also omit the method parameters:
+
+```{r means_with_apply_noargs}
+apply(women, 2, mean)
+```
+
+But if you are just starting out with R, I suggest you invest those few character strokes for readability later on.
+
+The above example dealt with columns. For instance, if you want to calculate the BMI of these women, you'll need to target the rows.
+The BMI formula is 
+$$weight/height^2*703$$
+
+where weight is in pounds and height is in inches.
+
+This formula is implemented in the following function.
+
+```{r bmi_function}
+bmi <- function(height, weight) {
+    (weight / height^2) * 703
+}
+bmi(65, 150)
+```
+
+You can also apply the formula to the `women` dataset:
+
+```{r calculate_bmi1}
+women$bmi1 <- apply(
+    X = women, 
+    MARGIN = 1, 
+    FUN = function(x){(x[2] / x[1]^2) * 703})
+head(women, n = 4)
+```
+
+if you like to use your own formula (it's always a good idea to write logic only once and reuse it in different places), you'll still need to wrap it inside an anonymous function call:
+
+```{r calculate_bmi2}
+women$bmi2 <- apply(
+    X = women, 
+    MARGIN = 1, 
+    FUN = function(x){bmi(x[1], x[2])})
+head(women, n = 4)
+```
+
+-----  
+
+## Processing Embedded Dataframes {#embeddeddf}
+
+Suppose you have imported some data that has a structure like this
+
+```{r embedded_df_data}
+genes <- c("gene A", "gene B", "gene C", "gene D")
+positions <- c("chr01:128757:129667", 
+               "chr01:366389:486990",
+               "chr02:8986463:9100856",
+               "chr03:53536:87201")
+my.genome <- data.frame(gene = genes, position = positions)
+my.genome
+```
+
+The problem here is that the second column, `positions`, of type `character`, actually holds three different variables: the chromosome identifyer, the start position and the stop position on the chromosome. To be able to perform analyses of chromosomal contents, or positional contexts, we will need to split this column into separate columns, each holding exactly one variable of the correct type (`factor`, `integer` and `integer`).
+
+When I first encountered this type of problem (it is a _challenge_ actually, some teachers would object, not a _problem_...), my first thought was "easy, simply apply a split and bind as three columns".
+
+Let's have a look at how the `strsplit` function works in splitting strings
+
+```{r strsplit_demo}
+strsplit(x = positions[1:2], split = ":")
+```
+
+As you can see, strsplit generates a list of vectors, with each vector corresponding to the string at the same index of the original character vector.
+So, easy, I thought. Simply assign these elements to three new columns of the original dataframe (assuming every split character results in a vector of three). I first created the columns, defined my splitter function and then used apply to get the job done
+
+```{r assign_new_columns}
+## create columns
+my.genome[, c("chromosome", "start", "stop")] <- NA
+## define splitter function
+loc.splitter <- function(x) {
+    ## strsplit returns a list!
+    strsplit(x["position"], ":")[[1]]
+}
+## use apply to fill the columns
+my.genome[, 3:5] <- apply(X = my.genome,
+                          MARGIN = 1,
+                          FUN = loc.splitter)
+my.genome
+```
+
+Whoa, what happened here?! This was not what I had in mind. Can you figure out what happened?
+
+...
+
+I did figure it out (eventually...). The applied function returned three elements at a time, and I had apply fill three columns of my dataframe. And that is exactly what R did, fill the three columns, but not by row but by column! Have a look at the output from apply and you can see:
+
+```{r apply_split_result}
+apply(X = my.genome,
+      MARGIN = 1,
+      FUN = loc.splitter)
+```
+
+Fortunately, R has a function to transpose this kind of structure (a matrix actually): the `t()` function, so that is what I did:
+
+```{r apply_and_transpose}
+my.genome[, 3:5] <- t(apply(X = my.genome,
+                            MARGIN = 1,
+                            FUN = loc.splitter))
+my.genome
+```
+
+Yeah, that's what I'm talking about! (Feeling very happy with myself...until I googled this problem). I found out there are a gazillion solutions to this problem, but only one of them is very very simple, because it uses a function you know really well: `read.table`, but not with the `file = ` argument but with `text = `:
+
+```{r do_it_easy}
+my.genome <- data.frame(gene = genes, position = positions)
+my.genome <- cbind(
+    my.genome,
+    read.table(
+        text = as.character(my.genome$position),
+        sep = ":"))
+colnames(my.genome) <- c(colnames(my.genome)[1:2], "chr", "start", "stop")
+my.genome
+```
+
+That's it. The lessons learned here:  
+
+- Always know that GIYF (Google Is Your Friend)
+- When reading tables, also those embedded within others, use `read.table`
+- You really learn a lot by fiddling about with data
+
+-----  
+
+## Applying statistical tests on Dataframes {#ttest}
+
+### Intro
+
+The t-test (or Student's t-test) is one of the most used statistical tests. It can help determine whether the means of two samples are differing significantly. This form is the *two-sample t-test*. In its alternative form, you can compare a single sample to an expected (population) mean (one-sample t-test). An important assumption of the test is that the data follow a normal (Gaussian) distribution (that is why the t-test is one of the *parametric tests*). If this is not the case (or if you simply don't want to test for or assume normality), you can use the *non-parametric* t-test counterpart, the Mann-Whitney U Test. If more that two groups are involved, ANOVA is your go-to guy.
+
+To investigate the application of these statistical tests on dataframes, we'll use the built-in dataset called `PlantGrowth`. This dataset shows the yield of a certain plant species under three different conditions (control and two treatments).
+
+My initial scientific question is "Is there a difference between the yields under these different conditions?". My null hypothesis H~0~ would therefore be "There is no difference in yield".
+
+### Data exploration
+
+Of course, you always visually inspect your data before embarking on a statistical-testing quest:
+
+```{r plant_growth_boxplot}
+with(PlantGrowth, boxplot(weight ~ group))
+```
+
+This plot indicates that the distributions of *ctrl* and *trt1* are quite close, and that *trt2* differs from the others. 
+
+The t-test and ANOVA assume normality. Normality can be roughly assessed from boxplots (as in the figure above - do you know how?), but histograms and density curves are better suited for this purpose. Let's create a histogram.
+
+```{r plant_growth_hist}
+hist(PlantGrowth$weight, 
+                   prob=TRUE, 
+                   main = NA, 
+                   xlab="Yield (g dry weight)")
+```
+
+That looks pretty "normal" doesn't it? Adding a real normal curve usually helps a lot:
+
+```{r plant_growth_hist2}
+x <- seq(0,20,0.005)
+m <- mean(PlantGrowth$weight)
+weight.sd <- sd(PlantGrowth$weight)
+hist(PlantGrowth$weight, 
+                   prob=TRUE, 
+                   main = NA, 
+                   xlab="Yield (g dry weight)")
+lines(x, dnorm(x, mean=m, sd=weight.sd), col="darkred", lwd=2)
+```
+
+Alternatively, you can plot the density curve of the data and add the normal distribution.
+
+```{r plant_growth_density}
+plot(density(PlantGrowth$weight), main = NA, ylim = c(0, 0.6))
+lines(x, dnorm(x, mean=m, sd=weight.sd), col="darkred", lwd=2)
+```
+
+OK, conclusion: it looks like a normal distribution, albeit not a perfect one. Let's proceed for now.
+
+### The t-test
+
+Since t-tests are designed for comparing at most 2 groups, we'll compare the two groups that are most alike in yield distribution: *ctrl* and *trt1*. 
+
+```{r t_test_plant_growth}
+test.result <- t.test(x = PlantGrowth$weight[PlantGrowth$group == "ctrl"], 
+       y = PlantGrowth$weight[PlantGrowth$group == "trt1"])
+test.result
+```
+
+It's as simple as that! To extract the p-value (or any other attribute), use the dollar operator: 
+
+```{r t_test_attributes, results = "hold"}
+test.result$p.value
+test.result$conf.int
+```
+
+As you can see, the p-value is 0.250, well above the usual cutoff of 5% (0.05). Therefore, we can conclude that the yields do not differ significantly between the control and treatment 1 plants (and accept the null hypothesis).
+
+Comparing control versus treatment 2 gives
+
+```{r t_test_plant_growth2}
+test.result2 <- t.test(x = PlantGrowth$weight[PlantGrowth$group == "ctrl"], 
+       y = PlantGrowth$weight[PlantGrowth$group == "trt2"])
+test.result2
+```
+
+And this p-value indicates there may be a statistically relevant effect of treatment 2 (p-value = `r test.result2$p.value`, just below the 5% cutoff).
+
+
+Now, let's extend this to the situation where you want to apply a t-test over the rows of a dataframe, for example when you have a dataframe holding expression values of genes (rows) in two groups of samples (columns).
+
+Here is a very simple dataframe to explore this scenario. Columns a through d represent measurements for condition A (e.g. the control group) and e through h condition B (e.g. treatment with a novel drug).
+
+```{r t_test_df}
+gene.expr <- data.frame(a = c(20, 34, 24, 51),
+                        b = c(21, 32, 27, 45),
+                        c = c(17, 26, 21, 49),
+                        d = c(18, 28, 28, 53), 
+                        e = c(22, 33, 29, 44),
+                        f = c(16, 34, 26, 42),
+                        g = c(19, 31, 31, 41),
+                        h = c(20, 28, 30, 43))
+rownames(gene.expr) <- c("SRSSHT", "GeNPL-1", "DUNNO", "WHTVR")
+controls <- c("a", "b", "c", "d")
+treatment <- c("e", "f", "g", "h")
+##have a look
+gene.expr
+```
+
+I am only interested in the p-value to be able to select the most interesting genes. Here is a custom function to extract this from a row of my dataframe.
+
+
+```{r}
+my.t.test <- function(x){
+    t.test(x[controls], x[treatment])$p.value
+}
+```
+
+and now the t-test applied over the rows
+
+```{r}
+apply(X = gene.expr,
+      MARGIN = 1,
+      FUN = my.t.test)
+```
+
+As you can see, only one gene in this example meets the standard 95% p value cutoff: WHTVR.  
+(NB: of course, no multiple testing corrections has been applied here - that is out of scope for this use case).
+
+### ANOVA
+
+The technique (one-way) Analysis of Variance (ANOVA) is an extension of the two-sample t test for independent groups covering situations where there are more than two groups being compared.
+In one-way ANOVA the data is sub-divided into groups based on a single classification factor.
+
+**Before an ANOVA can be carried out, it has to be determined that the variances for all factors are equal**. You cann do this using the `bartlett.test` function:
+
+```{r bartlett_test}
+with(PlantGrowth, bartlett.test(weight ~ group))
+```
+
+From the output we can see that the p-value of 0.2371 is not less than the significance level of 0.05. This means we cannot reject the null hypothesis that the variance is the same for all treatment groups. This means that there is no evidence to suggest that the variance in plant growth is different for the three treatment groups.
+
+In this example, we will analyse all three groups of the PlantGrowth dataset together. To investigate the differences between these groups, we fit the one-way ANOVA model using the `lm` function:
+
+```{r plant_growth_lm}
+yield.lm <- lm(weight ~ group, data = PlantGrowth)
+```
+
+Then, using the `summary` function, have a look at the parameter estimates and standard errors for the treatment effects:
+
+```{r plant_growth_lm2}
+summary(yield.lm)
+```
+
+The model output indicates some evidence of a difference in the average growth for the 2nd treatment compared to the control group. An analysis of variance (ANOVA) table for this model can be produced via the anova command (passing the linear model object):
+
+
+```{r plant_growth_anova}
+anova(yield.lm)
+```
+
+This table confirms that there are differences between the groups which were highlighted in the model summary. The function confint is used to calculate confidence intervals on the treatment parameters, by default 95% confidence intervals:
+
+```{r plant_growth_confint}
+confint(yield.lm)
+```
+
+The model residuals can be plotted against the fitted values to investigate the model assumptions. First we create a data frame with the fitted values, residuals and treatment identifiers:
+
+```{r plant_growth_fitting}
+plant.mod = data.frame(Fitted = fitted(yield.lm),
+  Residuals = resid(yield.lm), Treatment = PlantGrowth$group)
+```
+
+and then produce the plot:
+
+```{r}
+library(ggplot2)
+ggplot(plant.mod, aes(Fitted, Residuals, colour = Treatment)) + geom_point()
+```
+
+We can see that there is no major problem with the diagnostic plot but some evidence of different variabilities in the spread of the residuals for the three treatment groups.
+
+ALTERNATIVELY, WE COULD HAVE DONE THIS:
+1: fit a model
+
+```{r plant_growth_aov}
+fit <- aov(weight ~ group, data=PlantGrowth)
+fit
+```
+
+2: diagnostic plots
+Diagnostic plots provide checks for heteroscedasticity, normality, and influential observerations.
+
+```{r plant_growth_aov_diagnostics}
+layout(matrix(c(1,2,3,4),2,2)) # optional layout 
+plot(fit)
+```
+
+3: evaluate model effects
+
+```{r plant_growth_aov_eval}
+summary(fit) # display Type I ANOVA table
+drop1(fit, ~ . , test="F") # type III SS and F Tests
+```
+
+
+Now suppose we want to apply this to a dataframe of gene expression values, as shown before in the example of the t-test, but now with three instead of two groups:
+
+```{r t_test_df2}
+gene.expr2 <- data.frame(a = c(20, 34, 24, 51),
+                        b = c(21, 32, 27, 45),
+                        c = c(17, 26, 21, 49),
+                        d = c(18, 28, 28, 53), 
+                        e = c(22, 33, 29, 44),
+                        f = c(16, 34, 26, 42),
+                        g = c(19, 31, 31, 41),
+                        h = c(20, 28, 30, 43),
+                        i = c(20, 32, 22, 50),
+                        j = c(18, 33, 21, 52),
+                        k = c(21, 29, 19, 51),
+                        l = c(22, 27, 23, 54))
+
+rownames(gene.expr2) <- c("SRSSHT", "GeNPL-1", "DUNNO", "WHTVR")
+controls <- c("a", "b", "c", "d")
+treatment1 <- c("e", "f", "g", "h")
+treatment2 <- c("i", "j", "k", "l")
+##have a look
+gene.expr2
+```
+
+
+We need to apply anova to each row and extract the p-value. First, we need the custom function to apply with:
+
+```{r my_anova}
+my.anova <- function(x) {
+    #define factor
+    gr.factor <- factor(rep(x = c("control", "treatment1", "treatment2"), each = 4))
+    #perform anova
+    my.oav <- aov(formula = expr ~ group, 
+                  data = data.frame(expr = x, group = gr.factor))
+    #return p-value
+    summary(my.oav)[[1]]$'Pr(>F)'[1]
+}
+```
+
+Now, it's a simple apply call again:
+
+```{r apply_my_anova}
+apply(X = gene.expr2, MARGIN = 1, FUN = my.anova)
+```
+
+These results indicate a significant effect in genes DUNNO and WHTVR (again, without having applied multiple testing correction!). The next step would be to investigate the effect size (if anything significant has been found). This can be carried out using Tukeys HSD. 
+
+
+-----  
+
+## Lines: Helpers, Regression lines, Loess and Density Lines & Curves
+
+### Drawing curves from functions
+
+Sometimes you don't have data to plot but only a function, for instance a simple polynomial function.  
+$$f(x)=x^{3}+3x^{2}-6x-8$$
+
+(Example lent from [http://rpubs.com/wkmor1/simple-derivatives-in-r](http://rpubs.com/wkmor1/simple-derivatives-in-r))
+A simple plot of this function can be obtained using `curve`:
+
+```{r}
+f <- function(x) x^3 + 3 * x^2 - 6 * x - 8
+curve(f, -5, 4, ylab="f(x)")
+```
+
+
+You are often interested in a derivative of a function. Here is one for f(x):
+
+```{r}
+#Define a new function without body
+g <- function(x) {}
+#assign as body the derivative of f(x)
+body(g) <- D(body(f), 'x')
+#see what it looks like
+curve(g, -5, 4)
+```
+
+So what does this derivative look like?
+
+```{r}
+body(g)
+```
+
+Now wouldn't it be nice to add a line of the derivative of this function in the same plot?
+Easy peasy! The trick is using `par(new=TRUE)`. While we're at it, let's add some key points to the ploit as well (requires library rootSolve - use `install.packages("rootSolve")`)
+
+
+```{r}
+library(rootSolve)
+roots <- multiroot(g, c(-5, 4))
+roots$root
+f(roots$root)
+
+#adjust Margins for secondary axis
+par(mar = c(5,5,2,5))
+curve(f, -5, 4, col="green", lwd=2)
+points(f(roots$root) ~ roots$root, col="green", lwd=2)
+par(new=TRUE)
+curve(g, -5, 4, col="blue", xlab=NA, ylab=NA, axes=F, lwd=2)
+axis(side=4)
+mtext(side=4, line=3, "Derivative of f(x)")
+```
+
+
+
+
+```{r}
+library(sm)
+with(mtcars, {
+    cyl.f <- factor(cyl, levels = c(4, 6, 8),
+        labels = c("4 cylinder", "6 cylinder", "8 cylinder"))
+    sm.density.compare(mpg, cyl, xlab = "Miles per Gallon")
+    title(main = "MPG distribution by Car Cylinders")
+    colfill <- c(2:(1+length(levels(cyl.f))))
+    legend("topleft", levels(cyl.f), fill = colfill)
+})
+```
+

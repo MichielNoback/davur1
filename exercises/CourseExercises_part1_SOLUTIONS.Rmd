@@ -1,0 +1,650 @@
+---
+title: "Exercises part 1"
+author: "<YOUR NAME>"
+date: "<YOUR DATE>"
+output: pdf_document
+subtitle: 'Course: Data analysis and visualization using R'
+---
+
+This R Markdown document contains exercises to accompany the course "Data analysis and visualization using R".  
+This document contains the exercises themselves plus (in most cases) a R code chunk to complete, correct or create.
+There are some code chucks here bounded with this line: `###### TEST CODE - DO NOT REMOVE OR EDIT #######`. These code chunks are used to give you feedback on the correctness of your implementations. Do not edit or remove these chunks (unless you hate feedback).
+For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Before Knitting this document, check if you have the devtools package installed, by typing `library(devtools)` in the console. If this fails, you need to install it by typing `install.packages("devtools")`. 
+
+----
+
+```{r setup, echo = FALSE, include = FALSE}
+################################################################
+## THIS IS SETUP CODE - DO NOT EDIT!!!                        ##
+## If this fails you may need to install the devtools package ##
+################################################################
+labelerURL <- "labeler.R"
+source(labelerURL)
+labelMaker <- labeler()
+################################################################
+## END OF SETUP CODE                                          ##
+################################################################
+```
+
+
+
+# `r labelMaker$getSection()` Basic plotting
+
+Calculate/carry out the following. With all plots, take care to adhere to the rules regarding titles and other decorations. Tip: the site [Quick-R](http://www.statmethods.net/) has nice detailed information with examples on the different plot types and their configuration. Especially the section [on plotting](http://www.statmethods.net/graphs/index.html) is helpful for these assignments.
+
+
+#### **`r labelMaker$getExercise()` ** 
+
+The vectors below hold data for a staircase walking experiment. A subject of normal weight and height was asked to ascend a (long) stairs wearing a heart-rate monitor. The subjects' heart was registered for different step heights. Create a line (!) plot showing the relationship between heart rate and stair height.
+
+```{r fig.width = 5, fig.height = 3}
+#number of steps on the stairs
+stair_height <- c(0, 5, 10, 15, 20, 25, 30, 35)
+#heart rate after ascending the stairs
+heart_rate <- c(66, 65, 67, 69, 73, 79, 86, 97)
+##your code here creating the plot
+
+plot(heart_rate ~ stair_height,
+     main = "Hartslag versus traphoogte",
+     xlab = "aantal treden",
+     ylab = "hartslag (slagen/minuut)",
+     type = "l",
+     lwd = 2,
+     col = "blue")
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+The experiment from the previous question was extended with three more subjects. One of these subjects was also of normal weight, while two of the subjects were obese. The data are given below. Create a single scatter plot with connector lines between the points showing the data for all four subjects. Give the normal-weighted subjects a green line/marker and the obese subjects a red line/marker. You can add new data series to a plot by using the `points(x, y)` function. Use the `ylim()` function to adjust the Y-axis range.
+
+```{r fig.width = 4.5, fig.height = 3.5}
+#number of steps on the stairs
+stair_height <- c(0, 5, 10, 15, 20, 25, 30, 35)
+#heart rates for subjects with normal weight
+heart_rate_1 <- c(66, 65, 67, 69, 73, 79, 86, 97)
+heart_rate_2 <- c(61, 61, 63, 68, 74, 81, 89, 104)
+#heart rates for obese subjects
+heart_rate_3 <- c(58, 60, 67, 71, 78, 89, 104, 121)
+heart_rate_4 <- c(69, 73, 77, 83, 88, 96, 102, 127)
+
+##your code here creating the plot
+
+plot(x = stair_height,
+     y = heart_rate_1,
+     main = "Heart rate vs stair height",
+     xlab = "number of steps",
+     ylab = "heart rate (beats/min.)",
+     type = "b",
+     lwd = 2,
+     col = "green",
+     ylim = c(55, 130))
+points(x = stair_height,
+     y = heart_rate_2,
+     col = "green",
+     type = "b",
+     lwd = 2)
+points(x = stair_height,
+     y = heart_rate_3,
+     col = "red",
+     type = "b",
+     lwd = 2)
+points(x = stair_height,
+     y = heart_rate_4,
+     col = "red",
+     type = "b",
+     lwd = 2)
+
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+The body weights of chicks were measured at birth and every second day thereafter until day 20. They were also measured on day 21. There were four groups on chicks on different protein diets. Here are the data for the first four chicks. Chick one and two were on diet 1 and chick three and four on diet 2. Create a single line plot showing the data for all four chicks. Give each chick its own color
+
+```{r fig.width = 4.5, fig.height = 3.5}
+# chick weight data
+time <- c(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 21)
+chick_1 <- c(42, 51, 59, 64, 76, 93, 106, 125, 149, 171, 199, 205)
+chick_2 <- c(40, 49, 58, 72, 84, 103, 122, 138, 162, 187, 209, 215)
+chick_3 <- c(42, 53, 62, 73, 85, 102, 123, 138, 170, 204, 235, 256)
+chick_4 <- c(41, 49, 61, 74, 98, 109, 128, 154, 192, 232, 280, 290)
+
+##your code here creating the plot
+plot(x = time, y = chick_1,
+     type = "l",
+     lwd = 2,
+     col = "blue",
+     ylim = c(40, 300))
+points(x = time, y = chick_2,
+     type = "l",
+     lwd = 2,
+     lty = 3,
+     col = "blue")
+points(x = time, y = chick_3,
+     type = "l",
+     lwd = 2,
+     lty = 1,
+     col = "red")
+points(x = time, y = chick_4,
+     type = "l",
+     lwd = 2,
+     lty = 3,
+     col = "red")
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+With the data from the previous question, create a barplot of the maximum weights of the chicks.
+
+
+```{r fig.width = 4.5, fig.height = 3.5}
+maxima <- c(max(chick_1), max(chick_2), max(chick_3), max(chick_4))
+##"names"" also OK for "names.arg"
+barplot(maxima,
+  names.arg = c("Chick 1","Chick 2","Chick 3","Chick 4"),
+  ylab = "Maximum weight (grams)",
+  col = "gold",
+  main = "Maximum chick weights")
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+ The R language comes with a wealth of datasets for you to use as practice materials. We will see many of these. One of these datasets is The Time-Series dataset called `discoveries` holding the numbers of "great" inventions and scientific discoveries in each year from 1860 to 1959. Create plot(s) answering these two questions:
+ 
+**`r labelMaker$getLetter(reset = T)`** What is the frequency distribution of numbers of discoveries per year?
+
+**`r labelMaker$getLetter()`** What is the 5-number summary of discoveries per year?
+
+**`r labelMaker$getLetter()`** What is the trend over time for the numbers of discoveries per year?
+
+PS actually this is not a simple vector, but a vector with some time=-related attributes called a Time-Series (a `ts` class), but this does not really matter for this assignment.
+
+```{r fig.width = 4.5, fig.height = 3.5}
+#load datasets, if not already loaded
+library(datasets)
+#look at the discoveries dataset
+discoveries
+
+## Q: a
+barplot(table(discoveries),
+  main = "great discoveries per year",
+  xlab = "number of discoveries",
+  ylab = "frequency",
+  col = "green")
+
+##Q b
+summary(discoveries)
+
+##Q c
+plot(discoveries,
+     xlab = "year",
+     ylab = "number of discoveries",
+     main = "Great discoveries",
+     col = "blue", 
+     lwd = 2)
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+The R datasets package has three related timeseries datasets relating to lung cancer deaths. These are `ldeaths`, `mdeaths` and `fdeaths` for total, male and female deatchs, respectively. Create a line plot showing the montly mortality holding all three of these datasets. Use the `legend()` function to add a legend to the plot, as shown in this example:
+
+```{r fig.width = 4.5, fig.height = 3.5}
+t <- 1:5
+y1 <- c(2, 3, 5, 4, 6)
+y2 <- c(1, 3, 4, 5, 7)
+plot(t, y1, type = "b", ylab = "response", ylim = c(0, 8))
+points(t, y2, col = "blue", type = "b")
+legend("topleft", legend = c("series 1", "series 2"), col = c("black", "blue"), pch = 1, lty = 1)
+```
+
+**`r labelMaker$getLetter(reset = T)`** Create the mentioned line plot. Do you see trends and/or patterns and if so, can you explain these?
+
+**`r labelMaker$getLetter()`** Create a combined boxplot of the three time-series. Are there outliers? If so, can you figure out when this occurred?
+
+```{r fig.width = 5.5, fig.height = 4.5}
+#load datasets, if not already loaded
+library(datasets)
+
+#create plot
+total.col <- "red"
+m.col <- "blue"
+f.col <- "green"
+plot(ldeaths,
+     main = "deaths from lung cancer",
+     xlab = "year",
+     ylab = "number",
+     col = total.col,
+     ylim = c(0, 4000),
+     lwd = 2
+)
+lines(fdeaths, col = f.col, lwd = 2)
+lines(mdeaths, col = m.col, lwd = 2)
+legend(
+  "topleft", 
+  legend = c("total", "female", "male"), 
+  col = c(total.col, f.col, m.col), 
+  lty = 1)
+```
+
+
+# `r labelMaker$getSection()` Complex datatypes & Basic (dataframe) functions
+
+This section serves you some nice datatype challenges. These assignments focus mainly on Dataframes since they are the most important ones. 
+
+
+
+#### **`r labelMaker$getExercise()` ** 
+
+Almost all programming languages know the (hash)map / dict data structure storing key and value pairs. R does not have a dict, but you could make an dict-like structure using a list with named elements. Let's have a go at it.
+
+If I wanted to create and use a DNA codon translation table, I could do something like what is shown below. See if you can figure out what is going on there
+
+```{r}
+## define codon table as list
+codons <- list(GGA = "Gly", CCU = "Pro", AAA = "Lys", AGU = "Ser")
+## the DNA to translate
+my.DNA <- "GGACCUAAAAGU"
+my.prot <- ""
+## iterate the DNA and take only every position
+for (i in seq(1, nchar(my.DNA), by=3)) {
+    codon <- substr(my.DNA, i, i+2);
+    my.prot <- paste(my.prot, codons[[codon]])
+}
+print(my.prot)
+```
+
+**`r labelMaker$getLetter(reset = T)`** 
+Make a modified copy of this code chunk in such a way that no spaces are present between the amino acid residues (use help on paste() to figure this out) and that single-letter codes are used instead of three-letter codes.
+
+
+```{r}
+## define codon table as list
+codons <- list(GGA = "G", CCU = "P", AAA = "K", AGU = "S")
+## the DNA to translate
+my.DNA <- "GGACCUAAAAGU"
+my.prot <- ""
+## iterate the DNA and take only every position
+for (i in seq(1, nchar(my.DNA), by=3)) {
+  codon <- substr(my.DNA, i, i+2);
+  my.prot <- paste(my.prot, codons[[codon]], sep = "")
+}
+print(my.prot)
+```
+
+**`r labelMaker$getLetter()`** 
+Create a list called 'nuc.weights' with named elements containing two vectors - a vector with the Nucleotide single letter codes (A, C, G, T) and a vector with their molecular weights (491.2, 467.2, 507.2, 482.2). Make these list elements accessible through the names 'nucs' and 'weights'. Then iterate `my.DNA` and calculate its molecular weight.
+
+```{r}
+nuc.weights <- list(
+    nucs = c("A", "C", "G", "U"), 
+    weights = c(491.2, 467.2, 507.2, 482.2))
+DNA.weight <- 0
+for (i in 1:nchar(my.DNA)) {
+    current.nuc <- substr(my.DNA, i, i)
+    current.nuc.weight <- nuc.weights$weights[nuc.weights$nucs == current.nuc]
+    DNA.weight <- DNA.weight + current.nuc.weight
+}
+DNA.weight
+```
+
+
+
+#### **`r labelMaker$getExercise()` ** 
+
+The `airquality` dataset is a dataset included in the `datasets` package. We'll explore this in a few questions.
+
+**`r labelMaker$getLetter()`** 
+Create a scatterplot of Temperature as a function of Solar radiation. Is there, as you might naively expect, a strong correlation?
+
+```{r fig.width = 4.5, fig.height = 3}
+plot(airquality$Solar.R, airquality$Temp,
+     main = "Temperature as a function of Solar radiation",
+     xlab = "Solar radiation (lang)",
+     ylab = "Temperature (F)")
+```
+
+**`r labelMaker$getLetter(reset = T)`** 
+Create a boxplot (-panel) of Temp as a function of Month (use `?boxplot` to find out how this works). What appears to be the warmest month?
+
+```{r fig.width = 4.5, fig.height = 3}
+boxplot(airquality$Temp ~ airquality$Month,
+     main = "Temperature over the months",
+     xlab = "Month",
+     ylab = "Temperature (F)")
+```
+
+**`r labelMaker$getLetter()`** 
+What date (day/month) has the lowest recorded temperature? Which the highest? Please give temperature values in Celcius, not Fahrenheit! (Yes, this is an extra challenge!)
+
+```{r}
+#first create Temp Celcius column:
+#(°F  -  32)  x  5/9 = °C
+airquality$Temp.C <- (airquality$Temp - 32) * 5/9
+#get the required data
+airquality[airquality$Temp.C == min(airquality$Temp.C), c("Temp.C", "Month", "Day")]
+```
+
+**`r labelMaker$getLetter()`** 
+Report the 5 days with highest Ozone observations.
+
+```{r}
+airquality[order(airquality$Ozone, decreasing = T)[1:5], ] 
+```
+
+
+**`r labelMaker$getLetter()`** 
+Create a histogram of the wind speeds, and add a fat blue vertical line for the value of the mean and a fat red line for the median (use `abline()` for this).
+
+```{r fig.width = 4.5, fig.height = 3}
+hist(airquality$Wind, xlab = "Wind speed (mph)")
+abline(v = mean(airquality$Wind), col = "blue", lwd = 2)
+abline(v = median(airquality$Wind), col = "red", lwd = 2)
+```
+
+
+**`r labelMaker$getLetter()`** 
+Use the `pairs()` function with argument `panel = panel.smooth` to plot all pairwise correlations between Ozon, Solar radiation, Wind and Temperature. Which pair shows the strongest correlation?
+
+```{r}
+pairs(airquality, panel = panel.smooth)
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+
+You will explore a bird observation dataset, downloaded from [GOLDEN GATE AUDUBON SOCIETY](http://goldengateaudubon.org/birding-resources/observations/). This file lists bird observations collected by this bird monitoring group in the San Fransisco Bay Area. 
+You can download and open this file yourself. First open the file in Excel, replace all occurrences of the ";" character to "," and use "Save as.." to save it as ".csv" file (Comma-separated). It is often useful, when working on a project, to set the working directory (type `getwd()` to find out where this is and change it to a more suitable location using `setwd()`)
+
+```{r eval=TRUE}
+## opens the file. Note the use of the different method arguments! Can you explain these?
+bird.obs <- read.table("data/Observations-Data-2014_TEST.csv", sep=";", head=T, na.strings = "", quote = "", comment.char = "")
+```
+
+From here on, it is assumed that you have the dataframe `bird.obs` loaded. This series of exercises deals with cleaning and transforming data, and exploring a cleaned dataset using basic plotting techniques and descriptive statistics.
+
+
+**`r labelMaker$getLetter(reset = T)`** 
+First, explore the raw data as they are. 
+
+- What data on bird observations were recorded (i.e. what kind of variables do you have)?
+- What did R do to the original column names (from Observations-Data-2014.xlsx)?
+- Are all column names clear to you?
+
+```{r}
+## look at the loaded data structure
+str(bird.obs)
+```
+
+Apparantly, all is loaded as a factor; also the Date.start, Date.end (should be dates of course), and Number (should be Integer) and Notes (should be Character) columns. In the original column names tehre are spaces and these are replaced by dots. First column `Species..` is a serial number and the second `Species` is the English species name.
+ 
+**`r labelMaker$getLetter()`** 
+How many bird observations were recorded?
+
+```{r}
+nrow(bird.obs)
+```
+
+**`r labelMaker$getLetter()`** 
+The column holding observation "Number" is actually not a number. What type has R converted it into?
+
+```{r}
+class(bird.obs$Number)
+```
+
+**`r labelMaker$getLetter()`** 
+Convert the "Number" column into an integer column using `as.integer()`, but assign it to a new column called "Count" (i.e. do not overwrite the original values). Compare the first 50 values or so of these two columns. What happened to the data? Is this OK?
+
+```{r}
+bird.obs$Count <- as.integer(bird.obs$Number)
+head(bird.obs[, c(4, 8, 14)], n=50)
+```
+
+**This is NOT OK!**
+
+
+**`r labelMaker$getLetter()`** 
+The previous question has shown that converting factors to numbers is a bit dangerous. It is often easiest to convert characters to numbers. The best way to do this is by using the `as.is = c(<column indices>)` argument for read.table. 
+
+So, which columns should be loaded as real factor data and which as plain character data? Use `read.table()` and the as.is argument to reload the data, and then transform the Number column to integer again. 
+
+```{r}
+#read with as.is argument
+bird.obs <- read.table("data/Observations-Data-2014.csv",
+                sep=";",
+                head=T,
+                na.strings = "",
+                quote = "",
+                comment.char = "",
+                as.is = c(1, 6, 7, 8, 13))
+str(bird.obs)
+#convert Number column
+bird.obs$Count <- as.integer(bird.obs$Number)
+```
+
+**`r labelMaker$getLetter()`** 
+Compare the first 50 values of the Number and Count columns again. Has the conversion succeeded? How many `Number` values could not be transformed into an integer value? Hint: use `is.na()`
+
+```{r}
+head(bird.obs[, c(4, 8, 14)], n=50)
+sum(is.na(bird.obs$Count))
+```
+
+**`r labelMaker$getLetter()`** 
+Explore the sighting counts:
+
+- What is the maximum number of birds in a single sighting? (Use max() and which() or is.na() to solve this)
+- What is the mean sighting count
+- What is the median of the sighting count
+
+```{r}
+#What is the maximum number of birds in a single sighting?
+bird.obs[which(bird.obs$Count == max(bird.obs$Count, na.rm = T)), ]
+##OR
+bird.obs[!is.na(bird.obs$Count) & bird.obs$Count == max(bird.obs$Count, na.rm = T), ]
+
+#What is the mean sighting count
+mean(bird.obs$Count, na.rm = T)
+
+#What is the median of the sighting count
+median(bird.obs$Count, na.rm = T)
+```
+
+Is the Count variable a normal distributed value? You can use `table(...)` of `plot(density(...))` to explore this further.
+
+```{r fig.width = 4.5, fig.height = 3}
+table(bird.obs$Count)
+plot(density(bird.obs$Count, na.rm=T),
+     main = "density of Counts")
+
+##or with a log transformation (and some coloring)
+d <- density(log(bird.obs$Count), na.rm=T)
+plot(d, main = "density of log-transformed countsCounts")
+polygon(d, col = "red", border = "blue")
+```
+
+**No way this is anywhere near a normal distribution!**
+
+**`r labelMaker$getLetter()`** 
+Explore the species constitution: 
+
+- How many different species were recorded?
+- How many genera do they constitute?
+- What species from the genus "Puffinus" have been observed?
+
+Hint: use the function `unique()` here.
+
+```{r}
+#How many different species were recorded?
+length(unique(bird.obs$Common.name))
+
+#How many genera do they constitute?
+length(unique(bird.obs$Genus))
+
+#What species from the genus "Puffinus" have been observed?
+#the actual sightings
+bird.obs[bird.obs$Genus == "Puffinus", c(2, 3, 4, 6, 14)]
+#the species
+unique(bird.obs[bird.obs$Genus == "Puffinus", "Common.name"])
+```
+
+
+**`r labelMaker$getLetter()`** 
+This is a challenge exercise for those who like to grind their brains! Think of a strategy to "rescue" the NAs that appear after transforming "Number" to "Count". Hint: use `gsub()` or`grep()`
+
+```{r}
+#these are the values that need to be rescued:
+table(bird.obs[is.na(bird.obs$Count), "Number"])
+#I suggest you take the lowest of the range-like values: 1-3 becomes 1; 2-3 becomes 2; 100s becomes 100 etc
+#then do something like
+tmp <- bird.obs$Number[1:50]
+tmp
+gsub("(\\d+)-(\\d+)", "\\1", tmp)
+```
+
+
+**WE WILL REVISIT THIS DATASET LATER ON, WHEN WORKING WITH THE apply FUNCTIONS**
+
+
+
+
+
+# `r labelMaker$getSection()` Flow control & Functions in R
+
+This section serves you some exercises that will help you improve your function-writing skills.
+
+
+## Illegal reproductions
+As an exercise, you will re-invent the wheel here for some statistical functions.
+
+#### **`r labelMaker$getExercise()` ** 
+Create a function, `my.mean()`, that duplicates the R function mean(), i.e. calculates and returns the average of a vector of numbers. 
+
+```{r}
+my.mean <- function(x) {
+    sum(x, na.rm = T) / length(x)
+}
+```
+
+
+```{r echo=FALSE}
+###### TEST CODE - DO NOT REMOVE OR EDIT #######
+x <- c(2, 3, 4, 5, 6)
+y <- c(3.5, 2.3, 6.1, 2.2, 3.7, 5.1)
+if (my.mean(x) == mean(x) & my.mean(y) == mean(y)) {
+    print("You rock!")
+} else {
+    warning("your implementation of the 'MyMean' function is incorrect")
+}
+###### TEST CODE - DO NOT REMOVE OR EDIT #######
+```
+
+
+
+#### **`r labelMaker$getExercise()` ** 
+Create a function, `my.sd()`, that duplicates the R function sd(), i.e. calculates and returns the standard deviation of a vector of numbers. 
+
+```{r}
+my.sd <- function(x) {
+    sqrt(sum((x - mean(x))^2)/(length(x)-1))
+}
+```
+
+
+```{r echo=FALSE}
+###### TEST CODE - DO NOT REMOVE OR EDIT #######
+if (my.sd(x) == sd(x) & my.sd(y) == sd(y)) {
+    print("You rock!")
+} else {
+    warning("your implementation of the 'my.sd' function is incorrect")
+}
+###### TEST CODE - DO NOT REMOVE OR EDIT #######
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+Create a function, `my.median()`, that duplicates the R function median(), i.e. calculates and returns the median of a vector of numbers. This is actually a bit harder than you might expect. 
+
+```{r}
+my.median <- function(x) {
+    sorted <- sort(x)
+    if(length(x) %% 2 == 1) {
+        #uneven length
+        x.median <- sorted[ceiling(length(x)/2)]
+    } else {
+        x.median <- (sorted[length(x)/2] + sorted[(length(x)/2)+1]) / 2
+    }
+    return(x.median)
+}
+```
+
+
+```{r echo=FALSE}
+###### TEST CODE - DO NOT REMOVE OR EDIT #######
+if (my.median(x) == median(x) & my.median(y) == median(y)) {
+    print("You rock!")
+} else {
+    warning("your implementation of the 'my.median' function is incorrect")
+}
+###### TEST CODE - DO NOT REMOVE OR EDIT #######
+```
+
+
+#### **`r labelMaker$getExercise()` ** 
+Create a function, `GC.perc()`, that calculates and returns the GC percentage of a DNA or RNA sequence. Accept as input a sequence and a flag -`strict`- indicating whether other characters are accepted than core DNA (GATUC). If `strict = FALSE`, the percentage of other characters should be reported using a `warn()` call. If `strict = TRUE`, the function should terminate with an error message. Use `stop()` for this. `strict` should default to TRUE. NOTE, usage of `strict` can complicate things, so start with the core functionality!
+
+```{r}
+GC.perc <- function(seq, strict = TRUE) {
+    if (is.na(seq)) {
+        return(NA)
+    }
+    if (length(seq) == 0) {
+        return(0)
+    }
+    seq.split <- strsplit(seq, "")[[1]]
+    gc.count <- 0
+    anom.count <- 0
+    for (n in seq.split) {
+        if (length(grep("[GATUCgatuc]", n)) > 0) {
+            if (n == "G" || n == "C") {
+                gc.count <- gc.count + 1
+            }
+        } else {
+            if (strict) {
+                stop(paste("Illegal character", n))
+            } else {
+                anom.count <- anom.count + 1   
+            }
+        }
+    }
+    ##return perc
+    ##print(gc.count)
+    if (anom.count > 0) {
+        anom.perc <- anom.count / nchar(seq) * 100
+        warning(paste("Non-DNA characters have percentage of", anom.perc))
+    }
+    return(gc.count / nchar(seq) * 100)
+}
+```
+
+
+## END OF PART ONE
+
+
+
+
+

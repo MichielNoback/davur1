@@ -1,0 +1,246 @@
+---
+title: "Data analysis and visualization using R"
+author: "Michiel Noback"
+date: "november 2015"
+output:
+  ioslides_presentation: default
+  beamer_presentation:
+    colortheme: dolphin
+    fig_caption: no
+    toc: yes
+subtitle: Distributions, Sampling and Testing
+job: lecturer at Hanze University of Applied Science
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+##comment this out for pdf output
+#source("rmarkdown_knitr_header.R")
+```
+
+
+```{r set_margins, echo = F}
+par(mar=c(3,3,1,0))
+```
+
+## Contents
+
+- distributions and their functions
+- sampling from a distribution
+- sampling from your own data
+- statistical tests
+
+
+# Distribution functions
+
+## Distribution associated functions
+
+- R provides related functions for several distributions that can be used for  
+    - sampling: **r**xxxx
+    - Probability Density Function (PDF): **d**xxxx
+    - Cumulative Distribution Function (CDF): **p**xxxx
+    - Quantile Function (inverse of `pxxxx`): **q**xxxx
+
+## `rnorm()` 
+- Random numbers from a normal distribution with parameters:  
+    - `n` number of observations
+    - `mean` the mean of the distribution
+    - `sd` the standard deviation of the distribution
+
+```{r rnorm_demo, fig.width=4, fig.height=2.5}
+x <- rnorm(n=1000, mean=10, sd=2)
+hist(x, breaks=20)
+```
+
+
+## `dnorm()`
+`dnorm(x, mean, sd)` gives the density (height) of x on the normal ditribution with the given mean and sd. 
+
+```{r dnorm_demo, fig.width=4, fig.height=2.5, tidy=F}
+xseq <- seq(-4, 4, 0.01)
+densities <- dnorm(xseq, 0, 1)
+plot(xseq, densities, col="darkblue", xlab="", ylab="Density",
+     type="l", lwd=2, main="PDF")
+```
+
+
+## `pnorm()`
+`pnorm(q, mean, sd)` gives the area under the standard normal curve to
+the left of q
+
+```{r pnorm_demo, fig.width=4, fig.height=2.5, tidy=F}
+xseq <- seq(-4, 4, 0.01)
+cumulative <- pnorm(xseq, 0, 1)
+plot(xseq, cumulative, col="darkred", xlab="", ylab="Cumul. Prob.",
+     type="l", lwd=2, main="CDF")
+```
+
+
+## other distributions
+
+Similar to the `xnorm()` functions, there are corresponding functions for  
+
+- the binomial distribution `xbinom()`  
+- the poisson distribution `xpois()`  
+- Chi square `chisq`
+- and many others -- see [http://www.statmethods.net/advgraphs/probability.html](http://www.statmethods.net/advgraphs/probability.html) 
+
+
+## Sampling from a set of values: `sample()`
+
+- For some research aspects, shuffling the data (permutation) or taking random samples from a larger set is required.
+- The `sample()` function can be used for both.
+
+
+## permutations without replacement
+
+```{r sampling_demo_1}
+x <- 1:10
+sample(x)
+sample(x)
+```
+
+
+## permutations with replacement
+
+```{r sampling_demo_2}
+sample(x, replace = T)
+sample(x, replace = T)
+```
+
+
+## sampling integers from range 1 to X
+
+```{rsampling_demo_3}
+sample.int(1e3, 5, replace = F)
+sample.int(2, 10, replace = T)
+```
+
+
+## sampling a fixed set
+
+```{r sampling_demo_4}
+sample(x, size = 2, replace = T)
+sample(x, size = 2, replace = T)
+sample(x, size = 2, replace = T)
+```
+
+
+## sampling with probabilities
+
+```{r sampling_demo_5}
+sample(1:3, size = 10, replace = T, prob = c(0.25, 0.5, 0.25))
+sample(1:2, size = 10, replace = T, prob = c(0.2, 0.8))
+```
+
+
+## reproducible sampling using `set.seed()`
+
+```{r set_seed_demo}
+set.seed(1234)
+sample(x)
+set.seed(1234)
+sample(x)
+```
+
+
+
+# statistic tests
+
+## overview
+
+| test        | application                     | R function    | 
+|-------------|---------------------------------|---------------| 
+| t-test      | diff between 2 means            | t.test( )     | 
+| F-test      | diff between 2 variances        | var.test( )   | 
+| 1-way ANOVA | diff between >=2 means          | aov( )        | 
+| chi2-test   | relation between 2 nominal vars | chisq.test( ) | 
+| z-test      | standaard normaal verdeeld      | z.test( ) *   | 
+
+<span style="color: red; font-size: 0.8em;">\*[in package:TeachingDemos]</span>
+
+## t-test
+
+The t-test can be used to determine if two sets of -normal distributed- data are significantly different from each other or from an expected distribution.
+
+## Two sided
+
+The dataset `InsectSprays` contains counts of insects in agricultural experimental units treated with different insecticides. Let's look at only two spray types, "A" and "B". The null hypothesis will state that there is no difference in effectiveness between the two sprays (the means of the tow samples is the same).
+
+```{r t_test_demo_1}
+spray.A <- InsectSprays[InsectSprays$spray == "A", "count"]
+spray.B <- InsectSprays[InsectSprays$spray == "B", "count"]
+spray.A; spray.B
+```
+
+-----  
+
+```{r t_test_demo_2}
+t.test(x = spray.A, y = spray.B)
+```
+
+Thus, there is no evidence to support the alternative hypothsis.
+
+## One sample, two sided
+
+If we knew the expected insect counts (e.g. through historical data), we could have tested against an expected population average:
+
+
+```{r t_test_demo_3}
+t.test(x = spray.A, mu = 15)
+```
+
+
+## One sample, one sided
+
+If you are pretty certain the spray will NOT have a positive effect on insect counts, you can also perform a one sided test:
+
+```{r t_test_demo_4}
+t.test(x = spray.A, mu = 10, alternative = "greater")
+```
+
+
+## GEO example
+
+Time series, two groups with 4 timepoints. Information: [http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE46051](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE46051)
+
+```{r GEO_example, eval=F}
+##look at the data
+library(GEOquery)
+View(GSE46051[[1]])
+```
+
+-----  
+
+Load the expression (sample) data and create factor to define groups.
+
+```{r}
+data <- read.table("data/GSE46051_counts.txt",
+                   sep = "\t",
+                   head = T,
+                   as.is = c(1, 2))
+data <- data[1:20,]
+samples <- colnames(data[4:ncol(data)])
+sample.fac <- factor(gsub("_R[0-9]", "", samples))
+sample.fac
+```
+
+
+-----  
+
+Use t-test to explore difference between DMSO at day 10 versus Rotenone at day 10, for gene 1
+
+
+```{r}
+dmso.cols <- 16:18
+rotenone.cols <- 19:21
+apply(X = data, MARGIN = 1, FUN = function(x) {
+    a <- as.numeric(x[dmso.cols])
+    b <- as.numeric(x[rotenone.cols])
+    t.test(a, b)$p.value
+})
+```
+
+
+
+
+

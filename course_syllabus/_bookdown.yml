@@ -1,0 +1,4 @@
+book_filename: "IntroR_CourseSyllabus"
+edit:
+  link: https://github.com/MichielNoback/R_data_analysis_and_visualization/edit/master/course_syllabus/%s
+  text: "Edit"

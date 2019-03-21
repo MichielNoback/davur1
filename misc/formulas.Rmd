@@ -1,0 +1,55 @@
+---
+title: "Statistical formulas"
+author: "Michiel Noback"
+date: "24 January 2016"
+output: html_document
+---
+
+### Descriptive statistics
+
+#### Relative frequency
+$Relative frequency = \frac{Frequency}{n}$
+
+#### Median
+The value that lies most nearly in the middle of the sample.
+Symbol: **$\large\widetilde{y}$**
+
+#### Mean
+Sum of observations divided by the number of observations  
+Symbol: **$\large\bar{y}$**  
+Equation: **$\large\bar{y} = \frac{\sum_{i=1}^n y_i}{n}$**  
+
+#### Sample standard deviation
+Symbol: **$\large{s}$**  or **$SD$**
+Equation: **$\large\sqrt{\frac{\sum_{i=1}^n (y_i - \bar{y})^2}{n-1}}$**  
+
+#### Sample variance
+Standard deviation squared  
+Symbol: **$\large{s^2}$**  
+Equation: **$\large$**  
+
+#### Coefficient of variation  
+The standdard deviation expressed as a percentage of the mean  
+Symbol: **NA**  
+Equation: **$coefficient of variation = \large{\frac{s}{\bar{y}}}\small{\times{100\%}}$**  
+
+### Probability rules
+Symbol: **${Pr\left\{E\right\}}$**  
+Rules:  
+1. Probability always lies between 0 and 1: **$0 \leq Pr\left\{E\right\} \leq 1$**  
+2. The sum of the probabilities of all possible events equals 1:
+**$\sum_{i=1}^k Pr\left\{E_i\right\} = 1$**  
+3. The probability that an event $E$ does not happen ($E^C$), is one minus the probability that the event does happen:
+**$Pr\left\{E^C\right\} = 1 - Pr\left\{E\right\}$**  
+4. 
+
+
+
+
+#### Sample variance
+Symbol: **$\large$**  
+Equation: **$\large$**  
+
+#### Sample variance
+Symbol: **$\large$**  
+Equation: **$\large$**  
