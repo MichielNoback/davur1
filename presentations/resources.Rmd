@@ -1,0 +1,72 @@
+---
+title: "Resources"
+always_allow_html: yes
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+
+## Swirl course
+
+Swirl course to accompany this course: [http://github.com/MichielNoback/R_Data_Analysis](http://github.com/MichielNoback/R_Data_Analysis)
+
+
+## Data Files
+
+In this section all data files used or required for the course presentations or exercises are listed.  
+<ul>
+  <li>Whale selenium data:
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/whale_selenium.txt" target = "_blank">whale_selenium.txt</a>
+  </li>
+  <li>Bird observation data: 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/Observations-Data-2014.xlsx" target = "_blank">Observations-Data-2014.xlsx</a> or, as
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/Observations-Data-2014.csv">csv</a>
+  </li>
+  <li>Food constituents: 
+    <a href="https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/exercises/data/food_constituents.txt" target = "_blank">food_constituents.txt</a>
+  </li>
+  <li> Wine review data:
+    <a href="https://www.kaggle.com/zynicide/wine-reviews/downloads/winemag-data-130k-v2.csv/4" target ="_blank">winemag-data-130k-v2.csv</a>
+  </li>
+</ul>
+
+
+## Resources
+
+These resources will be used extensively during the course.
+
+- **The R project**  
+The official R language website: <a href = "http://www.r-project.org" target="_blank">www.r-project.org</a>
+
+- **CRAN**  
+The Comprehensive R Archive Network (<a href = "http://cran.r- project.org" target="_blank">CRAN</a>) is a network of ftp and web servers around the world that store identical, up-to-date, versions of code and documentation for R
+
+- **R studio**  
+R studio is the most popular IDE for writing, running, documenting, and maintaining R code projects: [http://www.rstudio.com](http://www.rstudio.com/)
+
+- **R Markdown**  
+R Markdown is a Markdown “Dialect” used for presenting, documenting and reporting in R: [http://rmarkdown.rstudio.com](http://rmarkdown.rstudio.com/)
+
+- **R cheat sheet**  
+The [R cheat sheet](https://raw.githubusercontent.com/MichielNoback/R_data_analysis_and_visualization/master/misc/R_cheatsheet.pdf) that is also available at the computer exam.
+
+- **RMarkdown reference**  
+The [RMarkdown reference](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) cards with extensive documentation. Also available at the computer exam!
+
+- **Bioconductor**  
+Bioconductor provides tools for the analysis and comprehension of high- throughput genomic data: [http://www.bioconductor.org](http://www.bioconductor.org/)
+
+
+## Screencasts
+
+<ul>
+  <li>Setting up on a Windows system 
+    <a href="https://www.youtube.com/watch?v=YL3avjNu6Ak" target = "_blank">Youtube</a>
+  </li>
+  <li>Starting with Rstudio 
+    <a href="https://www.youtube.com/watch?v=z0SoenlbJ5k" target = "_blank">Youtube</a>
+  </li>
+</ul>
+

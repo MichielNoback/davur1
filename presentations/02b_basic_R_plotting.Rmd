@@ -1,0 +1,191 @@
+---
+title: "Data analysis and visualization using R (1)"
+author: "Michiel Noback"
+date: "September 2019"
+output:
+  beamer_presentation: default
+  ioslides_presentation: default
+  slidy_presentation: default
+subtitle: R basics - plotting
+job: lecturer at Hanze University of Applied Science
+---
+    
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+#comment this out for pdf output
+source("rmarkdown_knitr_header.R")
+```
+
+```{r echo = F}
+par(mar=c(4, 4, 1.5, 0))
+```
+
+
+# Plotting
+
+## Basic embedded plot types
+
+- Looking at numbers is boring - people want to see pictures!
+- There are a few plot types supported by core R that deal with (combinations of) vectors: 
+    - scatter (or line-) plot
+    - barplot
+    - histogram
+    - boxplot
+
+## Scatter and line plots
+
+- Meet `plot()` - the workhorse of R plotting
+
+
+```{r plot_hello_1, fig.height = 4, fig.width = 6}
+time <- c(1, 2, 3, 4, 5, 6)
+response <- c(0.09, 0.30, 0.41, 0.48, 0.72, 1.12)
+plot(x = time, y = response)
+```
+
+
+## Plot decoration
+
+- By passing arguments to `plot()` you can modify or add many features of your plot
+- Basic decoration includes 
+    - adjusting markers (`pch = 19`, `col = "blue"`)
+    - adding connector lines (`type = "b"`) or removing points (`type = "l"`)
+    - adding axis labels and title (`xlab = "Time (hours)"`, `ylab = "Systemic response"`, `main = "Systemic response to agent X"`)
+    - adjusting axis limits (`xlim = c(0, 8)`)
+
+----
+
+Here is a more complete plot using a variety of arguments.
+
+```{r plot_hello_2, fig.width = 6, fig.height = 4}
+plot(x = time, y = response, pch = 19, type = "b", xlim = c(0, 8),
+     xlab = "Time (hours)", ylab = "Systemic response (a.u.)",
+     main = "Systemic response to agent X", col = "blue")
+```
+
+## Adjusting the plot symbol
+
+When you have many data points they will overlap. Using transparency with the `rgb(,, alpha=)` color definition and/or smaller plot symbols (`cex=`) solves this.
+
+```{r plot_hello_3, fig.width = 5, fig.height = 3.5}
+x <- rnorm(1000, 10, 2); y <- x + rnorm(1000, 0.5, 0.5)
+plot(x, y, pch = 19, cex = 0.6,
+     col = rgb(red = 0, green = 0, blue = 1, alpha = 0.2))
+```
+
+
+## Barplots
+
+- Barplots can be generated in two ways
+    - By passing a factor to plot() - simple of level frequencies
+    - By using barplot()
+
+```{r plot_hello_4, fig.height = 3.5, fig.width = 4.5}
+persons <- as.factor(sample(c("male", "female"), size = 100, replace = T))
+plot(persons)
+```
+
+
+## `barplot()` with a vector
+
+- `barplot()` can be called with a vector of heights (frequencies) or a table() object
+
+```{r barplot_1, fig.height = 4, fig.width = 6}
+frequencies <- c(22, 54, 12, 29)
+barplot(frequencies, names = c("one", "two", "three", "four"))
+```
+
+
+## `barplot()` with a table object
+
+```{r barplot_2, fig.height = 3, fig.width = 4.5}
+table(persons)
+barplot(table(persons))
+```
+
+
+## `barplot()` with a 2D table object
+
+Suppose you have these data:
+
+```{r}
+set.seed(1234)
+course <- rep(c("biology", "chemistry"), each = 10)
+passed <- sample(c("Passed", "Failed"), size = 20, replace = T)
+tbl <- table(passed, course) # the order matters!
+tbl
+```
+
+----
+
+You can create a stacked bar chart like this. (The `xlim=` setting is a trick to get the legend beside the plot)
+
+```{r barplot_3, fig.height = 3.5, fig.width = 5}
+barplot(tbl, col=c("red", "darkblue"), 
+        xlim=c(0, ncol(tbl) + 2), legend = rownames(tbl))
+```
+
+----
+
+Using the `beside=TRUE` argument, you get them side by side:
+
+```{r barplot_4, fig.height = 3.5, fig.width = 5}
+barplot(tbl, col=c("red", "darkblue"), beside = TRUE, 
+        xlim=c(0, ncol(tbl)*2 + 3), legend = rownames(tbl))
+```
+
+Later, we'll see another data structure to feed to barplot: matrix.
+
+## Histograms
+
+Histograms help you visualise the distribution of your data
+
+```{r histogram_1, fig.height = 3.5, fig.width = 5}
+male_weights <- c(rnorm(500, 80, 8)) ## create 500 random numbers around 80
+hist(male_weights)
+```
+
+
+-----
+
+Using the `breaks` argument, you can adjust the bin width. Always explore this option when creating histograms!
+
+```{r histogram_2, fig.height = 3, fig.width = 8}
+par(mfrow = c(1, 2)) # make 2 plots to sit side by side
+hist(male_weights, breaks = 5, col = "gold", main = "Male weights")
+hist(male_weights, breaks = 25, col = "green", main = "Male weights")
+```
+
+
+## Boxplots
+
+This is the last of the basic plot types. A boxplot is a visual representation of the *5-number summary* of a variable.  
+
+```{r boxplots_1, fig.height = 3, fig.width = 7}
+persons <- rep(c("male", "female"), each = 100)
+weights <- c(rnorm(100, 80, 6), rnorm(100, 75, 8))
+#print 6-number summary (5-number + mean)
+summary(weights[persons == "female"])
+```
+
+-----
+
+```{r boxplots_2, fig.height = 3.5, fig.width = 6, results = "hold"}
+par(mfrow = c(1, 2)) # make 2 plots to sit side by side
+# create boxplots of weights depending on sex
+boxplot(weights ~ persons, ylab = "weight")
+boxplot(weights ~ persons, notch = TRUE, col = c("yellow", "magenta"))
+```
+
+Use `varwidth=TRUE` when you want to visualize the difference in group sizes.
+
+
+## Plotting rules
+
+Plots should always have these decorations 
+
+- Axis labels indicating measurement type and its units
+- If multiple data series are plotted: a legend
+- Often a title as well
+
+
+

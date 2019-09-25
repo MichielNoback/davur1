@@ -1,0 +1,271 @@
+---
+title: "Example Use cases"
+author: "Michiel Noback"
+always_allow_html: yes
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+# Example Use Cases {#usecases}
+
+In this chapter, some example use cases will be presented demonstrating some concept or function.
+The topics for these use cases are selected because they appear to be harder to comprehend for my students, are a bit out of scope for the lectures, or because they are simply too extensive to fit into a few slides of a presentation.  
+
+## Dataframe Selections {#dfselection}
+
+R offers a wealth of methods to make selection on dataframes by columns, rows, or both.
+
+We'll explore the `iris` dataset, a dataframe holding morphological data on several species of plants from the genus _Iris_:
+
+```{r iris_table}
+DT::datatable(iris)
+```
+
+There are only three species in this dataset
+
+```{r show_iris_species}
+table(iris$Species)
+```
+
+but how do they relate to each other with repect to Sepal length?
+
+```{r boxplot_sepal_length}
+with(iris, boxplot(Sepal.Length ~ Species,
+                   ylab = "Sepal length (cm)",
+                   xlab = "Iris species"))
+```
+
+Now suppose I want to get the data from _virginica_ plants that have a Sepal length smaller than the largest Sepal length of _setosa_ plants?
+First of course we'll need the maximum of the _setosa_ plants:
+
+```{r get_max_sepal}
+max.setosa <- max(iris[iris$Species == "setosa", "Sepal.Length"])
+max.setosa
+```
+
+Which plant is it? Let's use the subset function to find out.
+
+```{r get_max_sepal_plant}
+subset(x = iris,
+       subset = (Species == "setosa" & Sepal.Length == max.setosa))
+```
+
+Now filter out the _virginica_ plants that have a Sepal length smaller than this value. I'll show two approaches, one with logical indexing and one with `subset`
+
+```{r get_small_virginicas_logical}
+##get a logical for small plants
+logi.small.sepal <- iris$Sepal.Length < max.setosa
+logi.small.sepal
+##get a logical for virginica plants
+logi.virginica <- iris$Species == "virginica"
+logi.virginica
+##combine the two via a boolean operation
+logi.both <- logi.small.sepal & logi.virginica
+logi.both
+##use it as a selector on the rows of the iris DF
+iris[logi.both, ]
+```
+
+Of course, you will usually perform this selection in one statement, but the operations carried out by R will be exactly the same (but without creating any variables of course):
+
+```{r get_small_virginicas_fast}
+iris[iris$Sepal.Length < max.setosa & iris$Species == "virginica", ]
+```
+
+The function `subset` will do the same behind the scenes, but your code may be more to your liking:
+
+```{r get_small_virginicas_subset}
+subset(x = iris,
+       subset = Sepal.Length < max.setosa & Species == "virginica")
+```
+
+By the way, **beware to use only one boolean and: &, not &&**. This will not give an error but only an empty result set
+
+```{r get_small_virginicas_subset_two_ands}
+subset(x = iris,
+       subset = Sepal.Length < max.setosa && Species == "virginica")
+```
+
+> & and && indicate logical AND and | and || indicate logical OR. The shorter form performs elementwise comparisons in much the same way as arithmetic operators. The longer form evaluates left to right examining only the first element of each vector. Evaluation proceeds only until the result is determined. The longer form is appropriate for programming control-flow and typically preferred in if clauses.  
+
+Can you figure out why using `&&` would give an empty set in the above case?
+
+See [The R manual](http://stat.ethz.ch/R-manual/R-patched/library/base/html/Logic.html) for details.
+
+-----  
+
+## Apply {#apply}
+
+Consider the `women` dataset, holding height and weight of a population sample of 15 women:
+
+```{r women_table}
+DT::datatable(women,
+              options = list("pageLength" = 15),
+              colnames = c("Woman", names(women)))
+```
+
+To calculate the average height and the average weight of this sample, one could of course simply do 
+
+```{r naive_means}
+with(women, {
+    print(mean(height))
+    print(mean(weight))
+})
+```
+
+However, when your dataset has (a lot) more columns, repeating this will be quite tedious...unless you use a `for` loop
+
+```{r means_with_for}
+for (i in 1:length(women)) {
+    print(mean(women[,i]))
+}
+```
+
+Enter `apply()`, a very nice function to do this in a handy one-liner
+
+```{r means_with_apply}
+apply(X = women, MARGIN = 2, FUN = mean)
+```
+
+The arguments I supplied to `apply`have the following purpose:  
+
+1. `X = women` specifies the data to be processed
+2. `MARGIN = 2` specifies wether columns or rows shoud be processed; 1 = rows and 2 = columns
+3. `FUN = mean` speciefies the function to be applied to the given dataframe
+
+
+Not only gives apply the the exact same result (of course, duh), but this approach has several advantages:
+
+- `apply` returns a named vector where the elements are named the same as the corresponding columns of the original dataframe
+- `apply` is computationally more efficient than the other approaches
+- it requires less code; a good programmer types as little as possible - except for Java programmers of course :-)
+
+If you really have strongh feelings about typing no more than strictly required, you can of course also omit the method parameters:
+
+```{r means_with_apply_noargs}
+apply(women, 2, mean)
+```
+
+But if you are just starting out with R, I suggest you invest those few character strokes for readability later on.
+
+The above example dealt with columns. For instance, if you want to calculate the BMI of these women, you'll need to target the rows.
+The BMI formula is 
+$$weight/height^2*703$$
+
+where weight is in pounds and height is in inches.
+
+This formula is implemented in the following function.
+
+```{r bmi_function}
+bmi <- function(height, weight) {
+    (weight / height^2) * 703
+}
+bmi(65, 150)
+```
+
+You can also apply the formula to the `women` dataset:
+
+```{r calculate_bmi1}
+women$bmi1 <- apply(
+    X = women, 
+    MARGIN = 1, 
+    FUN = function(x){(x[2] / x[1]^2) * 703})
+head(women, n = 4)
+```
+
+if you like to use your own formula (it's always a good idea to write logic only once and reuse it in different places), you'll still need to wrap it inside an anonymous function call:
+
+```{r calculate_bmi2}
+women$bmi2 <- apply(
+    X = women, 
+    MARGIN = 1, 
+    FUN = function(x){bmi(x[1], x[2])})
+head(women, n = 4)
+```
+
+-----  
+
+## Processing Embedded Dataframes {#embeddeddf}
+
+Suppose you have imported some data that has a structure like this
+
+```{r embedded_df_data}
+genes <- c("gene A", "gene B", "gene C", "gene D")
+positions <- c("chr01:128757:129667", 
+               "chr01:366389:486990",
+               "chr02:8986463:9100856",
+               "chr03:53536:87201")
+my.genome <- data.frame(gene = genes, position = positions)
+my.genome
+```
+
+The problem here is that the second column, `positions`, of type `character`, actually holds three different variables: the chromosome identifyer, the start position and the stop position on the chromosome. To be able to perform analyses of chromosomal contents, or positional contexts, we will need to split this column into separate columns, each holding exactly one variable of the correct type (`factor`, `integer` and `integer`).
+
+When I first encountered this type of problem (it is a _challenge_ actually, some teachers would object, not a _problem_...), my first thought was "easy, simply apply a split and bind as three columns".
+
+Let's have a look at how the `strsplit` function works in splitting strings
+
+```{r strsplit_demo}
+strsplit(x = positions[1:2], split = ":")
+```
+
+As you can see, strsplit generates a list of vectors, with each vector corresponding to the string at the same index of the original character vector.
+So, easy, I thought. Simply assign these elements to three new columns of the original dataframe (assuming every split character results in a vector of three). I first created the columns, defined my splitter function and then used apply to get the job done
+
+```{r assign_new_columns}
+## create columns
+my.genome[, c("chromosome", "start", "stop")] <- NA
+## define splitter function
+loc.splitter <- function(x) {
+    ## strsplit returns a list!
+    strsplit(x["position"], ":")[[1]]
+}
+## use apply to fill the columns
+my.genome[, 3:5] <- apply(X = my.genome,
+                          MARGIN = 1,
+                          FUN = loc.splitter)
+my.genome
+```
+
+Whoa, what happened here?! This was not what I had in mind. Can you figure out what happened?
+
+...
+
+I did figure it out (eventually...). The applied function returned three elements at a time, and I had apply fill three columns of my dataframe. And that is exactly what R did, fill the three columns, but not by row but by column! Have a look at the output from apply and you can see:
+
+```{r apply_split_result}
+apply(X = my.genome,
+      MARGIN = 1,
+      FUN = loc.splitter)
+```
+
+Fortunately, R has a function to transpose this kind of structure (a matrix actually): the `t()` function, so that is what I did:
+
+```{r apply_and_transpose}
+my.genome[, 3:5] <- t(apply(X = my.genome,
+                            MARGIN = 1,
+                            FUN = loc.splitter))
+my.genome
+```
+
+Yeah, that's what I'm talking about! (Feeling very happy with myself...until I googled this problem). I found out there are a gazillion solutions to this problem, but only one of them is very very simple, because it uses a function you know really well: `read.table`, but not with the `file = ` argument but with `text = `:
+
+```{r do_it_easy}
+my.genome <- data.frame(gene = genes, position = positions)
+my.genome <- cbind(
+    my.genome,
+    read.table(
+        text = as.character(my.genome$position),
+        sep = ":"))
+colnames(my.genome) <- c(colnames(my.genome)[1:2], "chr", "start", "stop")
+my.genome
+```
+
+That's it. The lessons learned here:  
+
+- Always know that GIYF (Google Is Your Friend)
+- When reading tables, also those embedded within others, use `read.table`
+- You really learn a lot by fiddling about with data
+

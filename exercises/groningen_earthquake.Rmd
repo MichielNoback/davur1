@@ -1,0 +1,91 @@
+# Aardbeving Westerwijtwerd d.d. 22 mei 2019
+
+* Copy the data file from `/commons/Themas/Thema04/inf4_NOMI/aardbeving.txt`.
+
+* Read in the data and verify theat all data (columns and rows - also the column names) are correct. 
+
+```{r}
+quake_data <- read.table(file = "aardbevingen.txt", 
+                         header = T,
+                         na.strings = "-")
+str(quake_data)
+```
+
+
+* Remove the columns with invariant values and sort the table on magnitude (descending)
+
+```{r}
+quake_data$Network <- NULL
+quake_data$Phase <- NULL
+
+quake_data <- quake_data[order(quake_data$Magnitude, decreasing = T), ]
+head(quake_data)
+```
+
+
+* Create a histogram of observed magnitudes and mark the mean over all stations with a vertical dashed line
+
+```{r}
+hist(quake_data$Magnitude, xlab="Magnitude")
+abline(v = mean(quake_data$Magnitude, na.rm = T), 
+       lwd = 2,
+       col = "blue",
+       lty = 2)
+```
+
+
+* Plot the magnitude as a function of distance to the epicentre and add line indicating the mean magnitude. Does the strength decline with distance?
+
+```{r}
+with(quake_data, {
+    plot(Magnitude ~ Distance)
+    abline(h = mean(quake_data$Magnitude, na.rm = T), 
+       lwd = 2,
+       col = "blue",
+       lty = 3)
+})
+```
+
+
+* Add an extra column called *Time_sec* where you converted the original "Tijd" column to a numeric value. Hint: use `substr()`.
+
+```{r}
+quake_data$Time_sec <- as.numeric(substr(quake_data$Tijd, 7, 11))
+```
+
+* Plot the distance as a function of arrival time (Time_sec). Next, create a linear model of this relationship and add a line representing this linear model.
+
+```{r}
+plot(quake_data$Distance ~ quake_data$Time_sec,
+     xlab="Time (sec)",
+     ylab = "Distance (km)",
+     main = "Distance as a function of quake wave arrival time")
+my_lm <- lm(quake_data$Distance ~ quake_data$Time_sec)
+abline(my_lm)
+
+#rsq <- function (x, y) cor(x, y) ^ 2
+#rsq(quake_data$Time_sec, quake_data$Distance)
+```
+
+* Inspect the contents of your fitted linear model; what is the speed of the earthquake wave?
+
+The speed of the wave is `r my_lm$coefficients[2]` km per seconds
+
+
+* Plot the residuals (`resid()`) of your model against the fitted (`fitted()`) values; do the residuals show random deviations or are there systematic trends or patterns?
+
+
+```{r}
+```
+
+
+* Add a factor based on the "Distance" column, with three levels: "Epicentre" < <15km: "Close" < 40km: "Distant"
+
+* Create boxplots of the magnitudes for these distance categories; are there any significant differences?
+
+* Create the mean magnitude and standard deviation per distance category 
+
+* Recalculate the quake wave speed using only distances "Epicentre" and "Close"; is this in accordance with earlier results? 
+
+* You have modelled the Distance as a function of Time. Now do the reverse: Time as a function of Distance. Do the wave speeds correspond? 
+

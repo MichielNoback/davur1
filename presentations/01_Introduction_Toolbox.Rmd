@@ -3,6 +3,7 @@ title: "Data analysis and visualization using R"
 author: "Michiel Noback"
 date: "november 2015"
 output:
+  slidy_presentation: default
   ioslides_presentation: default
   beamer_presentation: default
 subtitle: The R toolbox
