@@ -1,11 +1,11 @@
 ---
 title: "Data analysis and visualization using R"
 author: "Michiel Noback"
-date: "July 2019"
+date: "December 2019"
 output:
-  beamer_presentation: default
-  ioslides_presentation: default
   slidy_presentation: default
+  ioslides_presentation: default
+  beamer_presentation: default
 subtitle: R basics
 job: lecturer at Hanze University of Applied Science
 ---
@@ -144,6 +144,8 @@ Because this expression is the sole contents of the current line in the console,
 __A statement is a complete line of code that performs some action, while an expression is any section of code that evaluates to a value.__
 
 
+
+
 # Functions
 
 ## Definition
@@ -224,7 +226,7 @@ Create three variables with the given values - x=20, y=10 and z=3. Next, calcula
 
 ## R is vector-based
 
-- Repeat after me: **"all data in R lives inside a vector"**
+- In R, _**all data lives inside vectors**_.
 - When you type '2 + 4', R wil do this:  
 
     - create a vector of length 1 with its element having the value 2
@@ -339,9 +341,9 @@ x - z
 
 -  Logical operators:  
 
-    - `&`: logical "and"  
-    - `|`: logical "or"  
-    - `!`: logical "not"
+    - `&`: logical "AND"  
+    - `|`: logical "OR"  
+    - `!`: logical "NOT"
 
 -  Comparison operators (also logical):  
     - `<   <=   >   >=    ==`
@@ -484,7 +486,7 @@ Can you figure out this one?
 ```
 
 
-## Selecting vectors elements
+## Selecting vector elements
 
 Often, you want to get to know things about values in a vector  
 
@@ -499,7 +501,7 @@ There are several ways to do this as we'll see
 ## Selecting by index
 
 - The `index` is the position of a value in a vector.
-- R starts at 1
+- R starts at one (1)
 - Use brackets `[]` to specify one or more selected indices
 
 ```{r indexing-1}
@@ -579,4 +581,13 @@ Follow Hadleys' style guide [http://adv-r.had.co.nz/Style.html](http://adv-r.had
 - loading a library that is not in the core packages: `library(ggplot2)`
 - remove variable(s): `rm(x, y, z, myData)`
 
+## The best keyboar shortcuts
+
+- `ctr + 1` go to code editor
+- `ctr + 2` go to console
+- `ctr + alt + i` insert code chunk (RMarkdown)
+- `ctr + enter` run current line
+- `ctr + shift + k` knit current document
+- `ctr + alt + c` run current code chunk
+- `ctr + shift + o` source the current document
 

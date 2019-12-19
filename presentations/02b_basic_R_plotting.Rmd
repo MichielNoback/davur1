@@ -3,9 +3,9 @@ title: "Data analysis and visualization using R (1)"
 author: "Michiel Noback"
 date: "September 2019"
 output:
-  beamer_presentation: default
-  ioslides_presentation: default
   slidy_presentation: default
+  ioslides_presentation: default
+  beamer_presentation: default
 subtitle: R basics - plotting
 job: lecturer at Hanze University of Applied Science
 ---
@@ -30,11 +30,12 @@ par(mar=c(4, 4, 1.5, 0))
     - barplot
     - histogram
     - boxplot
+    
+We'll only look at the bare basics because we are going to do it good with ggplot2 in the next course.
 
 ## Scatter and line plots
 
-- Meet `plot()` - the workhorse of R plotting
-
+- Meet `plot()` - the workhorse of R plotting.
 
 ```{r plot_hello_1, fig.height = 4, fig.width = 6}
 time <- c(1, 2, 3, 4, 5, 6)

@@ -24,64 +24,11 @@ par(mar=c(4, 4, 1.5, 0))
 
 **Contents**
 
-- Matrices
 - Factors
 - Lists
 - Data frames
 - Reading dataframes from file (first iteration)
 - Plotting with dataframes
-
-# Matrices
-
-## Matrices are vectors with dimensions
-
-- A matrix is simply a vector with a dimension attribute
-- Here are two ways to create them
-
-```{r matrix_demo1}
-m <- matrix(1:10, nrow = 2, ncol = 5); m
-v <- 1:10; dim(v) <- c(2, 5); v
-```
-
-## Matrix usages
-
-- The matrix is an extremely important datastructure; there is an entire scientific field called "matrix algebra"
-- However, we do not really need it yet, except maybe for barplots:
-
-```{r matrix_demo2}
-m <- matrix(c(3, 10, 12, 6, 7, 13), nrow = 2, ncol = 3); m
-```
-
-----
-
-```{r matrix_demo3}
-barplot(m, names = c("one", "two", "three"))
-```
-
-## Arrays
-
-- Arays are also vectors with a dimensions (`dim`) attribute
-- Also created using `array()` function
-- An array with 2 dimensions is a matrix
-
-```{r arrays1}
-x <- 1:10
-dim(x) <- c(2, 5)
-x
-class(x)
-```
-
-
-----
-
-```{r arrays2, results='hold'}
-a <- array(data = 1:12, dim = c(2, 3, 2)) # same as "a <- 1:12; dim(a) <- c(2,3,2)"
-rownames(a) <- c("one", "two")
-colnames(a) <- c("a", "b", "c")
-a
-class(a)
-```
-
 
 # Nominal & Ordinal scales: Factors
 
@@ -187,6 +134,7 @@ plot(classSizes)
 classSizes < "big" ## only with in Ordinal scale
 sum(classSizes == "huge") 
 ```
+
 
 ## What doesn't work
 
@@ -485,17 +433,6 @@ plot(
     whale.selenium$liver.Se, whale.selenium$tooth.Se,
     xlab = "liver Selenium", ylab = "tooth Selenium")
 abline(lm(whale.selenium$tooth.Se ~
-              whale.selenium$liver.Se))
-```
-
-
-## Plot with a smoother
-
-```{r data_frame_io4, fig.width=5.5, fig.height=3.5}
-scatter.smooth(
-    whale.selenium$liver.Se, whale.selenium$tooth.Se,
-    xlab = "liver Selenium", ylab = "tooth Selenium")
-abline(lm(whale.selenium$tooth.Se ~ 
               whale.selenium$liver.Se))
 ```
 

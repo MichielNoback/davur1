@@ -4,11 +4,8 @@ author: "Michiel Noback"
 date: "September 2019"
 output:
   slidy_presentation: default
+  beamer_presentation: default
   ioslides_presentation: default
-  beamer_presentation:
-    colortheme: dolphin
-    fig_caption: no
-    toc: yes
 subtitle: using and writing functions in R
 job: lecturer at Hanze University of Applied Science
 ---
@@ -26,7 +23,6 @@ par(mar=c(4, 4, 1.5, 0))
 ## Contents
 
 - Descriptive statistics
-- Sorting & Ordering
 - General purpose functions
 - Reading and writing textual data (second serving)
 - Some programming basics: Flow control and writing functions
@@ -93,70 +89,6 @@ boxplot(ChickWeight$weight)
 ```
 
 
-# Sorting and ordering
-
-## Sort and Order
-
-- This is often a bit confusing but
-    - `sort()` sorts a vector
-    - `order()` returns a vector representing the ordered status of a vector
-- Use `sort()` only on simple vectors where you are not interested in context
-- Use `order()` when context matters, e.g. sorting the rows of a dataframe
-
-----
-
-```{r sort_order1}
-x <- c(2, 4, 6, 1, 3)
-sort(x)
-ordr <- order(x)
-ordr #the 4th index (value: 1) should be the first element!
-x[ordr] #select using these indices
-```
-
-## Select the top n values
-
-```{r sort_order2}
-x <- c(2, 4, 6, 1, 3)
-ordr <- order(x)
-x[ordr[1:3]] #select the lowest 3 values
-```
-
-## Reversed sorting
-
-```{r sort_order3}
-x <- c(2, 4, 6, 1, 3)
-ordr <- order(x, decreasing = T)
-x[ordr[1:3]] #select the highest 3 values
-```
-
-## Sorting dataframes
-
-```{r sorting_dataframe}
-geneNames <- c("P53","BRCA1","VAMP1", "FHIT")
-sig <- c(TRUE, TRUE, FALSE, FALSE)
-meanExp <- c(4.5, 7.3, 5.4, 2.4)
-genes <- data.frame(
-    "name" = geneNames,
-    "significant" = sig,
-    "meanExp" = meanExp)
-genes
-
-genes[order(genes$name), ] ## use order() as row selector
-```
-
-
-## Multilevel sorting
-
-You can also sort on multiple properties:
-
-```{r multilevel_sorting}
-students <- data.frame(
-    "st.names" = c("Henk", "Piet", "Sara", "Henk", "Henk"),
-    "st.ages" = c(22, 23, 18, 19, 24))
-students[order(students$st.names, students$st.ages), ]
-```
-
-
 # General purpose functions
 
 
@@ -177,6 +109,7 @@ students[order(students$st.names, students$st.ages), ]
     - Windows: `"E:\\emile\\datasets"`
     - Linux/Mac: `"~/datasets"` or `"/home/emile/datasets"`
 
+
 ## Glueing text pieces: `paste()`
 
 - Use `paste()` to combine elements into a string
@@ -196,6 +129,7 @@ paste(1:12, month.abb)
 str(chickwts)
 ```
 
+
 ## A local namespace: `with()`
 
 - When you have a piece of related code operating on a single dataset, use `with()` so you don't have to type its name all the time.
@@ -212,11 +146,13 @@ with(airquality, {
 - Note the use of the tilde `~` character to specify a **_formula_**.  
 - You can read the formula `A ~ B` as **_"A as a function of B"_**
 
+
 ## Convert numeric vector to factor: `cut()`
 
 - Sometimes it is useful to work with a factor instead of a numeric vector. 
 - For instance, when working with a Body Mass Index (bmi) variable it may be nice to split this into a factor for some analyses.
 - The function `cut()` is used for this.
+
 
 ## `cut()` demo
 - Suppose you have the following fictitious dataset
@@ -235,7 +171,7 @@ my.data <- data.frame(bmi = bmi, income = income)
 -----
 
 
-- You can of course look at income as a function of bmi using a plot:
+- You can of course look at income as a function of bmi using a scatter plot:
 
 ```{r cut_demo_2, fig.height = 3, fig.width = 6, results = "hold"}
 with(my.data, plot(income ~ bmi))
@@ -245,7 +181,7 @@ with(my.data, plot(income ~ bmi))
 -----
 
 
-- but wouldn't it be nice to look at the bmi categories as defined by the WHO? - use `cut()`
+...but wouldn't it be nice to look at the bmi categories as defined by the WHO? - use `cut()`
 
 
 ```{r cut_demo_3, fig.height = 3, fig.width = 6, results = "hold"}
@@ -260,55 +196,6 @@ with(my.data, boxplot(income ~ bmi.class))
 
 # File I/O revisited
 
-## Text data formats
-
-Textual data comes in many forms. Here are a few examples:
-
-`DesertBirdCensus.csv`
-```
-Species,"Count"
-Black Vulture,64
-Turkey Vulture,23
-Harris's Hawk,3
-Red-tailed Hawk,16
-American Kestrel,7
-```
-
------
-
-`BED_file.txt`
-```
-browser position chr7:127471196-127495720
-browser hide all
-track name="ItemRGBDemo" description="Item RGB demonstration" visi...
-chr7    127471196  127472363  Pos1  0  +  127471196  127472363  2...
-chr7    127472363  127473530  Pos2  0  +  127472363  127473530  2...
-chr7    127473530  127474697  Pos3  0  +  127473530  127474697  2...
-chr7    127474697  127475864  Pos4  0  +  127474697  127475864  2...
-chr7    127475864  127477031  Neg1  0  -  127475864  127477031  0...
-chr7    127477031  127478198  Neg2  0  -  127477031  127478198  0...
-```
-
------
-
-`mySNPdata.vcf`
-```
-##fileformat=VCFv4.0
-##fileDate=20100501
-##reference=1000GenomesPilot-NCBI36
-##assembly=ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/sv/breakpoint_assemblies.fasta
-##INFO=<ID=BKPTID,Number=-1,Type=String,Description="ID of the assembled alternate allele in the assembly file">
-##ALT=<ID=DEL,Description="Deletion">
-##ALT=<ID=CNV,Description="Copy number variable region">
-##FORMAT=<ID=GT,Number=1,Type=Integer,Description="Genotype">
-#CHROM  POS   ID  REF ALT   QUAL  FILTER  INFO  FORMAT  NA00001
-1 2827693   . CCGTGGATGCGGGGACCCGCATCCCCTCTCCCTTCACAGCTGAGTGACCCACATCCCCTCTCCCCTCGCA  C . PASS  SVTYPE=DEL;END=2827680;BKPTID=Pindel_LCS_D1099159;HOMLEN=1;HOMSEQ=C;SVLEN=-66 GT:GQ 1/1:13.9
-2 321682    . T <DEL>   6 PASS    IMPRECISE;SVTYPE=DEL;END=321887;SVLEN=-105;CIPOS=-56,20;CIEND=-10,62  GT:GQ 0/1:12
-2 14477084  . C <DEL:ME:ALU>  12  PASS  IMPRECISE;SVTYPE=DEL;END=14477381;SVLEN=-297;MEINFO=AluYa5,5,307,+;CIPOS=-22,18;CIEND=-12,32  GT:GQ 0/1:12
-3 9425916   . C <INS:ME:L1> 23  PASS  IMPRECISE;SVTYPE=INS;END=9425916;SVLEN=6027;CIPOS=-16,22;MIINFO=L1HS,1,6025,- GT:GQ 1/1:15
-3 12665100  . A <DUP>   14  PASS  IMPRECISE;SVTYPE=DUP;END=12686200;SVLEN=21100;CIPOS=-500,500;CIEND=-500,500   GT:GQ:CN:CNQ  ./.:0:3:16.2
-4 18665128  . T <DUP:TANDEM>  11  PASS  IMPRECISE;SVTYPE=DUP;END=18665204;SVLEN=76;CIPOS=-10,10;CIEND=-10,10  GT:GQ:CN:CNQ  ./.:0:5:8.3
-```
 
 ## Data file structure
 
@@ -324,6 +211,7 @@ Whatever the contents of a file, you always need to address (some of) these ques
 - What is the type in each column?
     - character / numeric / factor / date/time
 
+
 ## Some `read.table()` arguments
 
 | arg              | specifies          | example           | 
@@ -335,6 +223,7 @@ Whatever the contents of a file, you always need to address (some of) these ques
 | **na.strings**   | NA value           | na.strings = "-"  | 
 | **as.is**        | load as character  | as.is = c(1,4)    | 
 | **stringsAsFactors** | load strings as factors | stringsAsFactors = F |
+
 
 ## The data reading workflow
 
@@ -357,10 +246,20 @@ Always apply this sequence of steps and repeat until you are satisfied with the 
     - `sep = ";"`
     - `sep = "\t" # tab-separated`
 
+## Saving R objects to file
+
+Use the `save()` function to write R objects to file for later use.
+This is especially handy with intermediate results in long analysis workflows.
+
+```{r}
+x <- stats::runif(20)
+y <- list(a = 1, b = TRUE, c = "oops")
+save(x, y, file = "xy.RData")
+```
+
+
 ## Writing plot to file
 
-- You can use a redirect to write a plot to file 
-- Usually this will be a png file
 - Use `width` and `height` to specify size
 - Default unit is pixels
 - Use other unit: `units = "mm"`
@@ -373,186 +272,189 @@ dev.off() # don't forget this one!
 ```
 
 
-# Flow control
+# Pattern matching 
 
-## What is flow control?
+## What is pattern matching
 
-- Flow control constitutes a series of code elements used to control whether some code blocks are executed or not, and how many times
-- These structures are used for flow control  
-    - `if(){} else if(){} else{}` - Conditional execution
-    - `for(){}` - Repeated execution
-    - `while(){}` - Repeated conditional execution
+Pattern matching is the process of finding, locating, extracting and replacing patterns in character data that usually cannot be literally described.
 
-## if/else: conditional execution
+For instance, it is easy enough to look for the word "Chimpansee" in a vector containing animal species names:
 
-- Since flow control is used primarily within functions it is dealt with here
-- The first is `if & else` for conditional code 
-
-```{r ifelse_demo}
-x <- 43
-if (x > 40) {
-    print("TRUE")
-} else {
-    print("FALSE")
-}
-```
-
-
-## if/else real life example
-
-- This code chunk checks if a file exists and only downloads it if it is not present
-
-```{r eval=FALSE}
-my_data_file <- "/some/file/on/disk"
-## fetch file
-if (!file.exists(my_data_file)) {
-    print(paste("downloading", my_data_file))
-    download.file(url = remote_url, destfile = my_data_file)
-} else {
-    print(paste("reading cached copy of", my_data_file))
-}
-```
-
-
-## ifelse ternary
-
-There is also a shorthand for `if(){}else{}`
-
-```{r ternary_op}
-a <- 3
-x <- if (a == 1) 1 else 2
-x
-```
-
-## if/else on dataframes: `ifelse()`
-
-ifelse on dataframes: this is wrong:
 ```{r}
-#only first value evaluated
-airquality$foo <- if (airquality$Ozone < 30) 0 else 1 
+animals = c("Chimpanzee", "Cow", "Camel")
+animals == "Chimpanzee"
 ```
 
-but this works:
- 
+-----
+
+What are you going to do if there are multiple variants of the word you are looking for? This?
+
 ```{r}
-airquality$bar <- ifelse(airquality$Ozone < 30, 0, 1)
-head(airquality)
+animals = c("Chimpanzee", "Chimp", "chimpanzee", "Pan troglodytes")
+animals == "Chimpanzee" | animals == "Chimp" | animals == "chimpanzee"
 ```
 
+The solution here is not using literals, but describe **_patterns_**.  
 
-## for: iteration
+Look at the above example. How would you describe a pattern that would correctly identify all Chimpanzee occurrences?
 
-- `for` is used for looping a series of values
-- The preferred way to loop the columns or rows of a dataframe is with `apply()` and its relatives (next presentation)
+-----
 
-```{r for-loop1}
-for (i in 1:3) {
-    print(i)
-}
+Is you pattern something like this?
+
+_A letter C in upper-or lower case followed by 'himp' followed by nothing or 'anzee'_
+
+In programming  we use **_regular expressions_** or **_RegEx_** to describe such patterns:
+
+`[Cc]himp(anzee)?`
+
+
+```{r}
+grepl("[Cc]himp(anzee)?", animals)
 ```
+
+## Functions using regex
+
+- **finding** Does an element contain a pattern (TRUE/FALSE)? `grepl(pattern, string)`
+- **locating** Which elements contain a pattern (INDEX)? `grep(pattern, string)`
+- **extracting** Get the content of matching elements `grep(pattern, string, value = TRUE)`
+- **replace** Replace the first occurrence of the pattern `sub(pattern, replacement, string)`
+- **replace all** Replace all occurrences of the pattern `gsub(pattern, replacement, string)`
+
+## Regex syntax
+
+A regex can be build out of any combination of  
+
+- **character sequences** - Literal sequences, such as 'chimp'
+- **character classes** - A listing of possibilities for a single position. Between brackets: `[adgk]` means 'a' or 'd' or 'g' or 'k'. Use a hyphen to create a series: `[3-9]` means digits 3 through 9 and `[a-zA-Z]` means all alphabet characters. `[^adgk]` means anything _but_ a, d, g or k. A special case is `.`: any character.
+- **alternatives** - Are defined by the pipe symbol `|` 
+- **quantifiers** - How many times the preceding block should occur. See next slide
+- **anchors** - `^` means matching at the start of a string. `$` means at the end.
+
+
+## Cheatsheet
+
+An excellent cheatsheet from the RStudio website is also included
+<a href="figures/RegExCheatsheet.pdf" target="_blank">here</a>
+
+## Quantifiers
+
+- **`*`**: 0 or more times
+- **`+`**: 1 or more times
+- **`?`**: 0 or 1 time
+- **`{n}`**: exactly `n` times
+- **`{n,}`**: at least `n` times
+- **`{,n}`**: at most `n` times
+- **`{n, m}`**: at least `n` and at most `m` times. 
+
+## Some examples
+
+This is the recognition sequence for the _HincII_ restriction endonuclease:
+
+```
+5'-GTYRAC-3'
+3'-CARYTG-5'
+```
+
+How would you define a regular expression that is equally precise?
+
+Ambiguity codes can be found
+<a href="data/ambiguity-codes.html" target="_blank">here</a>
 
 ----
 
-Sometimes, a `for` loop is handy with indexing
+```{r}
+HincII_rs <- "GT[CT][AG]AC"
+sequences <- c("GTCAAC",
+               "GTCGAC",
+               "GTTGAC",
+               "aGTTAACa",
+               "GTGCAC")
+grep(pattern = HincII_rs, x = sequences, value = TRUE)
+```
 
-```{r for-loop2}
-x <- c("foo", "bar", "baz")
-for (i in 1 : length(x)) {
-    print(x[i])
-}
+## Dutch dates
+
+Here are some Dutch dates, in different accepted formats. The last two are not a correct notation.
+Create a RegEx that will determine whether an element contains a Dutch date string.
+
+```{r}
+dates <- c("15/2/2019", "15-2-2019", "15-02-2019", "015/2/20191", "15/2/20191")
+dateRegex <- "[0-9]{2}[/-][0-9]{1,2}[/-][0-9]{4}"
+grep(pattern = dateRegex, x = dates, value = TRUE)
+```
+
+Why were the last two matched?  
+Because the pattern is there, embedded in a longer string.  
+We have to **_anchor_** the pattern to be more specific. 
+
+## Anchoring
+
+Using anchoring, you can make sure the string is not longer than you explicitly state:
+
+```{r}
+dates <- c("15/2/2019", "15-2-2019", "15-02-2019", "015/2/20191", "15/2/20191")
+dateRegex <- "^[0-9]{2}[/-][0-9]{1,2}[/-][0-9]{4}$"
+grep(pattern = dateRegex, x = dates, value = TRUE)
+```
+
+Now it is correct.
+
+## Special character classes
+
+Since patterns such as `[0-9]` accur so frequently, they have dedicated character classes such as `[[:digit:]]`. The most important other ones are 
+
+- **digits** `[[:digit:]]` or `\\d`: equivalent to `[0-9]`
+- **alphabet characters** `[[:alpha:]]`: equivalent to `[a-zA-Z]`
+- **lowercase characters** `[[:lower:]]`: equivalent to `[a-z]`
+- **uppercase characters** `[[:upper:]]`: equivalent to `[A-Z]`
+- **whitespace characters** `[[:space:]]` or `\\s`: Space, tab, vertical tab, newline, form feed, carriage return
+- **punctuation characters** `[[:punct:]]`: One of !"#$%&’()*+,-./:;<=>?@[]^_`{|}~
+
+(have a look at the cheat sheet for all) 
+
+-----  
+
+Here is the same example, this time using these predefined character classes
+
+```{r}
+dates <- c("15/2/2019", "15-2-2019", "15-02-2019", "15022019", "15/2/20191")
+dateRegex <- "[[:digit:]]{2}[/-]\\d{1,2}[/-]\\d{4}"
+grep(pattern = dateRegex, x = dates, value = TRUE)
+```
+
+## Postal codes
+
+Here are some Dutch zip (postal) codes, in different accepted formats. The last two are not a correct notation.
+Create a RegEx that will determine whether an element contains a Dutch zip code.
+
+```{r}
+zips <- c("1234 AA", "2345-BB", "3456CC", "4567 dd", "56789aa", "6789a_")
+zips
 ```
 
 
-# Creating functions
+## Prosite patterns
 
-## Functions are named code blocks
+<a href="https://prosite.expasy.org/" target="_blank">Prosite</a> is a database of amino acid sequence motifs. One of them is the Histidine Triad profile (PDOC00694). 
 
-- Functions are named blocks of code with a single well-defined purpose
-- They ususally have some data as input: its **arguments**
-- They usually have some **return** value
-- You have already used many **_predefined_** ones: `str`, `max`, `read.table` etc.
-- Defined with  
-  ```
-    my_function <- function(arg, arg, ...) {
-            <function body with return statement>
-        }
-  ```
-
-## A first function
-
-- Here is a simple function determining whether some number is even
-
-```{r first_function}
-is_even <- function(x) {
-    evens <- x %% 2 == 0
-    return(evens) ##explicit return() not required 
-}
-is_even(1:5)
+```
+[NQAR]-x(4)-[GSAVY]-x-[QFLPA]-x-[LIVMY]-x-[HWYRQ]-  
+[LIVMFYST]-H-[LIVMFT]-H-[LIVMF]-[LIVMFPT]-[PSGAWN]
 ```
 
+- Write this down as a RegEx
+- Was that efficient? Using the `gsub()` function, can you convert it in a RegEx using code? It may take several iterations. Was that efficient?  
+- Next, use an appropriate function to find if, and where, this pattern is located within the sequences in file `data/hit_proteins.txt` (<a href="data/hit_proteins.txt" target="_blank">here</a>)
 
-## Function basics
-
-- The result of the last statement within a function is the return value of that function
-- Use `return()` for forcing return values at other points:
-
-```{r return_values}
-my_message <- function(age) {
-    if (age < 18) return("have a lemonade!")
-    "have a beer!" #implicit return statement
-}
-my_message(20)
-```
+Amino Acid codes and Prosite pattern encoding can be found
+<a href="data/ambiguity-codes.html" target="_blank">here</a>
 
 
-## Default argument values
+## Locating and Extracting
 
-- Use default values for function arguments whenever possible
-- Specified with `some_arg = <default-value>`
-- Almost all functions in R packages have many arguments with default values
-
-```{r default_args}
-my_power <- function(x, power = 2) {
-    x ^ power
-}
-my_power(10, 3) ## custom power
-my_power(10) ## defaults to 2
-```
+This is outside the scope of this first acquaintance. The `stringr` package from the tidyverse is much better at this than the base R functions. And the tidyverse is in the next course...
 
 
-## Errors and warnings
 
-- When someting is not right, but not enought to quit execution, use a warning to let the user (or yourself) know
-- `warning("I am not happy")`
-- When something is terribly wrong, stop execution with an error message
-- `stop("I can't go on")`
 
-## Errors and warnings demo
-
-```{r errors, eval = T}
-my_inverse <- function(x) {
-    if (!is.numeric(x)) {
-        stop("non-numeric vector:")
-    }
-    return(x/3)
-}
-my_inverse(c("a", "b"))
-my_inverse(1:4)
-```
-
-## Warning or stop?
-
-This could have been done alternatively
-
-```{r warnings, eval = T, warning = T}
-my_inverse <- function(x) {
-    if (!is.numeric(x)) {
-        warning("NAs introduced with non-numeric input")
-        return(rep(NA, length(x)))
-    }
-    return(x/3)
-}
-my_inverse(c("a", "b")) 
-```
-
-It is up to you whether stop() or warning() is appropriate.

@@ -1,7 +1,7 @@
 ---
 title: "Data analysis and visualization using R"
 author: "Michiel Noback"
-date: "november 2015"
+date: "January 2020"
 output:
   slidy_presentation: default
   ioslides_presentation: default
@@ -41,51 +41,28 @@ This presentation will introduce you to a toolbox that will serve you well durin
 
 ## The R programming language
 
-Wikipedia says:  
-    "R is a programming language and software environment for statistical 
-    computing and graphics. The R language is widely used among 
-    statisticians and data miners for developing statistical software
-    and data analysis"
+
+Besides its free nature, R is very popular because it  
+
+- has an interactive mode (read–evaluate–print loop: REPL)
+- makes repeating analyses (with new data) very easy
+- supports "literate programming" for creating presentations (such as this one!) and reports
+- has embedded advanced graphical support
 
 
-## R is just a programming language
+## R graphics showcase
 
-- R is a programming language like any other. 
-- It knows about character data, numbers, lists, functions (...but **has no dicts**)
-- Like Python, it has an interactive mode
+Below follow some figures that you will be able to make at the end of this smester
 
+![](figures/facetting-1s.png)
 
-## R is **not** just a programming language
+-----
 
-- It has embedded advanced graphical support
-- It has extensive support for statistical work
+![](figures/polarplot-1s.png)
 
-## R showcase (1)
+-----
 
-![R logo](figures/Rgallery_CC-vs_nCC_kT_prof.png)
-
-## R showcase (2)
-
-![R logo](figures/Rgallery_correlation.png)
-
-## R showcase (3)
-
-![R logo](figures/RGallery_galaxy_density_contours.jpg)
-
-## R showcase (4)
-
-![R logo](figures/Rgallery_temperature_monthly_boxplot.png)
-
-## What is funny about R
-
-In R, **EVERYTHING** lives inside a vector. There are no singular variables of atomic data types, only vectors of length zero or greater:
-
-```{r all_is_vector}
-x <- 42
-x
-x[1]
-x[1][1][1][1]
-```
+![](figures/ptsd-jitter-5-1s.png)
 
 
 ## Tool 2: RStudio
@@ -93,9 +70,10 @@ x[1][1][1][1]
 ![RStudio logo](figures/RStudioLogo.png)
 
 
-## RStudio is the IDE for R
+## The workbench
 
-![RStudio screen](figures/RStudio_screen1.jpg)
+![](figures/RStudio_screen3.png)
+
 
 
 ## Tool 3: RMarkdown
@@ -105,12 +83,13 @@ x[1][1][1][1]
 
 ## RMarkdown is a great reporting tool
 
-You can use it  
+In RMarkdown, you can combine regular text and figures with embedded R code that will be executed to generate a final document.
 
-- to create reports in word, pdf or html
-- you can use it to create presentations (such as this one)
-- support for it is integrated in RStudio
-- to embed R code that will be executed to generate your report
+You can use it to  
+
+- create reports in word, pdf or html (web)
+- create presentations (such as this one)
+- create entire websites (as the next course shows)
 
 
 ## RMarkdown is really basic
@@ -132,53 +111,4 @@ You can use it
 - See [swirlstats.com](http://swirlstats.com/)
 
 
-## Let's get dirty
-
-- OK, before we're going into the gritty details of R, let me try to convince you why it could be nice to learn it.
-- R has a very nice `package` of demo datasets
-- `ChickWeight` is one of these - a dataframe with 578 weight measurements of chicks on different diets
-
-```{r demo_chickweight_part1}
-head(ChickWeight)
-```
-
-## Plotting ChickWeight
-- I want to explore weight trends over time for the different diets
-- Done using the ggplot2 package in only a few lines of code
-- *I challenge you to try this in Excel!!*
-
-```{r demo_chickweight_part2, fig.keep = "none"}
-library(ggplot2)
-#make nicer labels
-ChickWeight$Diet <- factor(ChickWeight$Diet,
-        labels = c("Diet 1", "Diet 2", "Diet 3", "Diet 4"))
-ggplot(ChickWeight, aes(x = Time, y = weight)) + facet_grid(. ~ Diet) +
-    geom_point(aes(color = Chick), alpha = 0.3, size = 1) + 
-    geom_line(aes(color = Chick), alpha = 0.3) + 
-    geom_smooth(method = "loess", size = 1) +
-    theme(legend.position="none") +
-    xlab("Time (days)") + ylab("Weight (grams)")
-```
-
-* picture on next slide
-
-----
-
-```{r demo_chickweight_part3, echo = FALSE}
-library(ggplot2)
-#make nicer labels
-ChickWeight$Diet <- factor(ChickWeight$Diet,
-        labels = c("Diet 1", "Diet 2", "Diet 3", "Diet 4"))
-ggplot(ChickWeight, aes(x = Time, y = weight)) + facet_grid(. ~ Diet) +
-    geom_point(aes(color = Chick), alpha = 0.4, size = 1) + 
-    geom_line(aes(color = Chick), alpha = 0.4) + 
-    geom_smooth(method = "loess", size = 1) +
-    theme(legend.position="none") +
-    xlab("Time (days)") + ylab("Weight (grams)")
-```
-
-## The end
-
-- This concludes the overview of the toolbox and demo use case
-- In the next presentation we'll cover some basic R and then come back to visit R markdown
 

@@ -1,0 +1,7 @@
+Purpose;Description;Function
+**finding**;Does an element contain a pattern (TRUE/FALSE);`grepl(pattern, string)`
+**locating**;Which elements contain a pattern (INDEX);`grep(pattern, string)`
+**locating**;Where is the pattern is found in the string;`regexpr(pattern, string)`
+**extracting**;Get the content of matching elements;`grep(pattern, string, value = TRUE)`
+**replacing**;Replace the first occurrence of the pattern;`sub(pattern, replacement, string)`
+**replacing**;Replace all occurrences of the pattern;`gsub(pattern, replacement, string)`
