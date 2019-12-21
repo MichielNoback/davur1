@@ -1,7 +1,7 @@
 ---
 title: "Data analysis and visualization using R (1)"
 author: "Michiel Noback"
-date: "September 2019"
+date: "December 2019"
 output:
   slidy_presentation: default
   ioslides_presentation: default
@@ -46,7 +46,8 @@ Looping with `for` may be tempting, but highly discouraged in R because its inef
 - `lapply`: Loop over a list and evaluate a function on each element; returns a list of the same length
 - `sapply`: Same as lapply but try to simplify the result
 - `tapply`: Apply a function over subsets of a vector (read: split with a factor)
-- (There are more but these are the important ones)
+
+There are more but these are the important ones.
 
 ## Basic apply usage
 
@@ -66,9 +67,11 @@ Here, a function is applied to both columns and rows
 
 ```{r}
 df <- data.frame(x = 1:5, y = 6:10)
-apply(X = df, MARGIN = c(1,2), FUN = function(x) (x-1)^2)
+minus_one_squared <- function(x) (x-1)^2
+apply(X = df, MARGIN = c(1,2), FUN = minus_one_squared)
 ```
 
+(That was a bit lame: `minus_one_squared(df)` does the same)
 
 ## `apply()` example: BMI
 
@@ -79,18 +82,6 @@ head(women, n=3)
 women$bmi <- apply(X = women, 
                    MARGIN = 1, 
                    FUN = function(x) (x[2] / x[1]^2) * 703)
-head(women, n=4)
-```
-
-## Extract inline function
-
-- When the passed inline function gets complicated it is advisable to extract it to a real function
-    
-```{r apply_demo3}
-bmi <- function(height_weight) {
-    (height_weight[2] / height_weight[1]^2) * 703
-}
-women$bmi <- apply(X = women, MARGIN = 1, FUN = bmi)
 head(women, n=4)
 ```
 
@@ -119,7 +110,7 @@ apply(df, 1, spwr, p = 3)
 ```
 
 
-Note: The `...` argument works for all apply functions.
+Note: The `...` argument works for all `apply` functions.
 
 ## `lapply()`: apply to a list
 
@@ -303,38 +294,14 @@ with(chickwts, tapply(weight, feed, mean))
 
 -----
 
-```{r message=FALSE}
+```{r }
 sapply(split(chickwts, chickwts$feed), function(x){mean(x$weight)})
+```
+
+And this is the topic of the next course:
+
+```{r message=FALSE}
 library(dplyr)
 group_by(chickwts, feed) %>% summarise(mean_weigth = mean(weight))
-```
-
-## `merge()` to bring data from two dataframes together
-
-- In many cases, data is distributed over multiple sources (often files).
-- The `merge()` function helps you combining these datasets on common identifiers.
-- Suppose you want to analyse gene class in relation to expression levels
-- Note that if two columns have the same name, `merge()` uses these by default!
-
-
-----  
-
-```{r}
-gene.classes <- data.frame(
-    geneID = c("gi:267", "gi:235", "gi:332", "gi:111"),
-    class = c("regulator", "metabolism", "structural", "regulator"))
-top.expressed.genes <- data.frame(
-    tissue = c("connective", "muscle", "nervous", "epithelial"), 
-    gene = c("gi:235", "gi:267", "gi:235", "gi:332"))
-merge(top.expressed.genes, gene.classes, by.x="gene", by.y="geneID")
-```
-
-----
-
-Consider the use of the `all = ` argument (`all`, `all.x` and `all.y`).
-
-```{r}
-merge(top.expressed.genes, gene.classes, by.x="gene", by.y="geneID", all=TRUE)
-
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: "Data analysis and visualization using R (1)"
 author: "Michiel Noback"
-date: "September 2019"
+date: "December 2019"
 output:
   slidy_presentation: default
   beamer_presentation: default
