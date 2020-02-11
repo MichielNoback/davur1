@@ -83,7 +83,7 @@ use parentheses `()` for grouping parts of equations.
 
 ## Operator Precedence
 
-All "operators" adhere to the standard mathematrical **precedence** rules (PEMDAS):
+All "operators" adhere to the standard mathematical **precedence** rules (PEMDAS):
 
 ```
     Parentheses (simplify inside these)
@@ -218,7 +218,7 @@ Create three variables with the given values - x=20, y=10 and z=3. Next, calcula
 2. $x^z$
 3. $q = x \times y \times z$
 4. $\sqrt{q}$
-5. $\frac{q}{\pi}$ (pi is gewoon pi in R)
+5. $\frac{q}{\pi}$ (pi is simply pi in R)
 6. $\log_{10}{(x \times y)}$
 
 
@@ -227,7 +227,7 @@ Create three variables with the given values - x=20, y=10 and z=3. Next, calcula
 ## R is vector-based
 
 - In R, _**all data lives inside vectors**_.
-- When you type '2 + 4', R wil do this:  
+- When you type '2 + 4', R will do this:  
 
     - create a vector of length 1 with its element having the value 2
     - create a vector of length 1 with its element having the value 4
@@ -240,13 +240,13 @@ Create three variables with the given values - x=20, y=10 and z=3. Next, calcula
 
 R knows five basic types of data:
 
-**numeric**:&nbsp; numbers with a decimal part: `3.123`, `5000.0`, `4.1E3`
+**numeric**:&nbsp; numbers with a decimal part: `3.123`, `5000.0`, `4.1E3`  
 **integer**:&nbsp; numbers without a decimal part: `1`, `0`, `2999`  
-**logical**:&nbsp; `true` or `false` (also called boolean values)  
-**character**:&nbsp; text, should be put within quotes: `"hello R"`
-**factor**:&nbsp; nominal and ordinal scales (dealt with later)  
+**logical**:&nbsp; `true` or `false` (also called Boolean values)   
+**character**:&nbsp; text, should be put within quotes: `"hello R"`  
+**factor**:&nbsp; nominal and ordinal scales (dealt with later)   
 
-**Note 1:** If you type a number on the console, it will always be a `numeric` value,decimal part or not.  
+**Note 1:** If you type a number on the console, it will always be a `numeric` value, decimal part or not.  
 
 **Note 2:** For character data, single and double quotes are equivalent but double are preferred.  
 
@@ -415,7 +415,7 @@ as.integer(x)
 ```
 
 
-## Limits to coersion
+## Limits to coercion
 
 - R will not coerce types that are non-coercable: you get an `NA` value.
 
@@ -575,13 +575,13 @@ Follow Hadleys' style guide [http://adv-r.had.co.nz/Style.html](http://adv-r.had
 
 - help on function: `help(function)`
 - or `?function`
-- autocomplete/suggestions in RStudio: `tab` key
+- auto-complete/suggestions in RStudio: `tab` key
 - help (in Rstudio): F1
 - installing a library that is not in the core packages: `install.packages("ggplot2"")`
 - loading a library that is not in the core packages: `library(ggplot2)`
 - remove variable(s): `rm(x, y, z, myData)`
 
-## The best keyboar shortcuts
+## The best keyboard shortcuts
 
 - `ctr + 1` go to code editor
 - `ctr + 2` go to console
