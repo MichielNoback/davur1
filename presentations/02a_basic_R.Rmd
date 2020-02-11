@@ -236,7 +236,7 @@ Create three variables with the given values - x=20, y=10 and z=3. Next, calcula
 - We'll revisit this behavior later.
 
 
-## Four types of data
+## Five types of data
 
 R knows five basic types of data:
 
