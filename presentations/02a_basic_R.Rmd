@@ -497,6 +497,9 @@ Often, you want to get to know things about values in a vector
 
 There are several ways to do this as we'll see
 
+## Indexing explained
+
+![](figures/indexing_in_R_s.png)
 
 ## Selecting by index
 
