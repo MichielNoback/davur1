@@ -325,10 +325,10 @@ grepl("[Cc]himp(anzee)?", animals)
 
 A regex can be build out of any combination of  
 
-- **character sequences** - Literal sequences, such as 'chimp'
-- **character classes** - A listing of possibilities for a single position. Between brackets: `[adgk]` means 'a' or 'd' or 'g' or 'k'. Use a hyphen to create a series: `[3-9]` means digits 3 through 9 and `[a-zA-Z]` means all alphabet characters. `[^adgk]` means anything _but_ a, d, g or k. A special case is `.`: any character.
-- **alternatives** - Are defined by the pipe symbol `|` 
-- **quantifiers** - How many times the preceding block should occur. See next slide
+- **character sequences** - Literal sequences, such as 'chimp'  
+- **character classes** - A listing of possibilities for a single position.   Between brackets: `[adgk]` means 'a' or 'd' or 'g' or 'k'. Use a hyphen to create a series: `[3-9]` means digits 3 through 9 and `[a-zA-Z]` means all alphabet characters. `[^adgk]` means anything _but_ a, d, g or k. A special case is `.`: any character.  
+- **alternatives** - Are defined by the pipe symbol `|`   
+- **quantifiers** - How many times the preceding block should occur. See next slide  
 - **anchors** - `^` means matching at the start of a string. `$` means at the end.
 
 
@@ -453,8 +453,5 @@ Amino Acid codes and Prosite pattern encoding can be found
 
 ## Locating and Extracting
 
-This is outside the scope of this first acquaintance. The `stringr` package from the tidyverse is much better at this than the base R functions. And the tidyverse is in the next course...
-
-
-
+This is outside the scope of this first acquaintance. The `stringr` package from the tidyverse is much better at this than the base R functions. 
 

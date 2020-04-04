@@ -14,6 +14,11 @@ job: lecturer at Hanze University of Applied Science
 source("rmarkdown_knitr_header.R")
 ```
 
+## Embarking in Data Science
+
+![](figures/influenza_1918_new_york.jpg)
+
+
 # Why do statistical programming?
 
 ## Complete reproducibility and flexibility

@@ -1,0 +1,56 @@
+---
+title: "Graphical parameters"
+author: "Michiel Noback"
+date: "2/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Graphical parameters to `plot()`
+
+```{r}
+#num1 <- 0;
+#num2 <- 0;
+series <- 1:20
+plot(0, 0, xlim=c(1,20) , ylim=c(0.5, 7.5), col="white" , yaxt="n" , ylab="" , xlab="")
+
+# the rainbow() function gives a nice palette across all colors
+# or use hcl.colors() to specify another palette
+# use  hcl.pals() to get an overview of available pallettes
+colors = hcl.colors(20, alpha = 0.8, palette = 'viridis')
+
+#pch
+points(series, rep(1, 20), pch = 1:20, cex = 2)
+#col
+points(series, rep(2, 20), col = colors, pch = 16, cex = 3)
+#cex
+points(series, rep(3, 20), col = "black" , pch = 16, cex = series * 0.2)
+
+#overlay to create new symbol
+points(series, rep(4, 20), pch = series, cex = 2.5, col = "blue")
+points(series, rep(4, 20), pch = series, cex = 1.5, col = colors)
+ 
+#lty
+for (i in 1:6) {
+    points(c(-2, 0) + (i * 3), c(5, 5), col = "black", lty = i, type = "l", lwd = 3)
+    text((i * 3) - 1, 5.25 , i)
+}
+#type and lwd
+for (i in 1:4) {
+    #type
+    points(c(-4, -3, -2, -1) + (i * 5), rep(6, 4),
+           col = "black", type = c("p","l","b","o")[i], lwd=2)
+    text((i * 5) - 2.5, 6.4 , c("p","l","b","o")[i] )
+    #lwd
+    points(c(-4, -3, -2, -1) + (i * 5), rep(7, 4), col = "blue", type = "l", lwd = i)
+    text((i * 5) - 2.5, 7.23, i)
+}
+#add axis
+axis(side = 2, at = c(1, 2, 3, 4, 5, 6, 7),
+    labels = c("pch" , "col" , "cex" , "combine", "lty", "type" , "lwd" ),
+    tick = FALSE, col = "black", las = 1, cex.axis = 0.8)
+```
